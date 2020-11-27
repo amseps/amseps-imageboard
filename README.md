@@ -3,24 +3,36 @@
 
 # Basic Setup
 First install https://nodejs.org/en/download/
+
 And Git https://git-scm.com/downloads
+
 Verify these with:
+
   git -v
   node -v
   npm -v
+
 Because npm should come prepackaged with node,
+
 then clone with git, or using github desktop
+
   git clone https://github.com/amseps/amseps-imageboard
+
 within this clone we will have /backend, and /amseps,
+
 within two separate commandlines type:
+
   npm install //only have to run the first time you clone down, for all of these installs
   cd backend
   npm install
   nodemon server //runs server.js locally, for debugging etc
+
 And the second commandline:
+
   cd amseps
   npm install 
   npm start
+  
 The website will then open in your browser and you are free to make changes :)
 
 Make sure that the DB you are using in server.js is the Dev server NOT the Prod!
