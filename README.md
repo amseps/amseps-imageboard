@@ -32,7 +32,7 @@ The website will then open in your browser and you are free to make changes :) M
 
 
 # Vague Roadmap because using monday.com is for noobs
-
+```
   	#DONE:
     Init setups
     Mongodb basics
@@ -56,9 +56,17 @@ The website will then open in your browser and you are free to make changes :) M
         Reply numbers!
           Linking between threads make easy
       Mini-votes:
-        red, sparkle, clover, fire, melon
+        gold -> gold/brown, sparkle -> white/purple, clover -> green/black, fire -> red/orange, melon ->pink/green
+          Threads and replies are able to be voted on.
+          These votes have no real meaning , but they do display a cool number that you can click up to ... five? times per person
+          Five different types of votes, each with a color
+          This is more for fun
       Notes:
+        Notes are brief messages you can leave that will directly tail a post
+          No images allowed, like 128 characters max
+            These notes will feature in a scrollable list at the end of that thread or reply header
         Notes on anything
+          Notes only have one vote option , red circle
       Little threads functions
         Like cool clicks on fings idk lolle
       Images https://www.npmjs.com/package/react-images-upload 
@@ -73,6 +81,9 @@ The website will then open in your browser and you are free to make changes :) M
       Security Fixations
         Make it so you can't just GET /world or whatever
           bc boy that just aint right
+            https://security.stackexchange.com/questions/33837/get-vs-post-which-is-more-secure 
+            https://www.netsparker.com/blog/web-security/rest-api-web-service-security/ 
+            Although it appears that CRUD security should be handled through mongodb controls rather than server.js
         Using Captchas for posts https://www.npmjs.com/package/react-google-recaptcha
           https://www.npmjs.com/package/react-google-recaptcha-v3 
       Search
@@ -87,6 +98,7 @@ The website will then open in your browser and you are free to make changes :) M
         Cleaning up bootstrap
         Custom shits 
         Just cleanup dogge
+        That shit look like the mf apple store
       Get some handsome graphicks
         Ness
         Soure
@@ -105,11 +117,16 @@ The website will then open in your browser and you are free to make changes :) M
       Separate boards ?
       ADVERTISE SHITTE
       ROBOT automod
+        Delete SHIT before it is posted
+        Delete SHIT AFTER it is posted
+        Delete SHITTY replies ?
+        Censor SHIT images :)
       Ape autoposters :)
 
     #Maybe?:
-      Open source?
+      Open source? fuk that lole
     
     #Makes me think:
       https://github.com/OpenIB/OpenIB/ wow what a shitty device
       https://github.com/OpenIB/OpenIB/blob/master/board-search.php search make me thinke
+```
