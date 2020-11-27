@@ -1,14 +1,14 @@
 # amseps-imageboard
  React Native 2048-chen
 
-  DONE:
+  	#DONE:
     Init setups
     Mongodb basics
     Routes and Models basics
     GET and POST basics for Threads only
 
 
-  TODO:
+  	#TODO:
 
     Actionable:
       Give threads a datafield for number of replies
@@ -50,10 +50,10 @@
         Meme pages :)
       Post it on tha mf innernet
 
-    STRETCH GOALS:
+    #STRETCH GOALS:
       EPIC Chat Feature
       Separate boards ?
       ADVERTISE SHITTE
 
-    Maybe?:
+    #Maybe?:
       Open source?
