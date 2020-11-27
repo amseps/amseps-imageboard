@@ -1,6 +1,33 @@
 # amseps-imageboard
  React Native 2048-chen
 
+# Basic Setup
+First install https://nodejs.org/en/download/
+And Git https://git-scm.com/downloads
+Verify these with:
+  git -v
+  node -v
+  npm -v
+Because npm should come prepackaged with node,
+then clone with git, or using github desktop
+  git clone https://github.com/amseps/amseps-imageboard
+within this clone we will have /backend, and /amseps,
+within two separate commandlines type:
+  npm install //only have to run the first time you clone down, for all of these installs
+  cd backend
+  npm install
+  nodemon server //runs server.js locally, for debugging etc
+And the second commandline:
+  cd amseps
+  npm install 
+  npm start
+The website will then open in your browser and you are free to make changes :)
+
+Make sure that the DB you are using in server.js is the Dev server NOT the Prod!
+
+
+# Vague Roadmap because using monday.com is for noobs
+
   	#DONE:
     Init setups
     Mongodb basics
@@ -12,6 +39,11 @@
 
     Actionable:
       Give threads a datafield for number of replies
+      run everything client side fuck these kidz
+      metrics for each thread on the catalog
+      make catalog grid instead of list :)
+        make it a dynamic list also
+
 
     Future:
       Work on giving replies to Threads
@@ -27,12 +59,25 @@
       Images https://www.npmjs.com/package/react-images-upload 
         I imagine that self hosting is cheaper than cloudinary or something
           Maybe do this earlier idke lole
+        Also making thumbnails of images
+        getting a unique address for images , secretly it may not be that tough
+          like {thread._id}_{reply._id} or thread_num / reply_num
       Admin controls
         Delete Threads
         Edit threads
       Security Fixations
         Make it so you can't just GET /world or whatever
           bc boy that just aint right
+        Using Captchas for posts https://www.npmjs.com/package/react-google-recaptcha
+          https://www.npmjs.com/package/react-google-recaptcha-v3 
+      Search
+        Searching a catalog for individual threads
+        Or a thread for replies?
+        Or maybe both at tha same time
+      Archiving old threads? How will it work
+        Just have a field like archived: true
+        xd
+        or date of archival
       Make it look nicer
         Cleaning up bootstrap
         Custom shits 
@@ -54,6 +99,12 @@
       EPIC Chat Feature
       Separate boards ?
       ADVERTISE SHITTE
+      ROBOT automod
+      Ape autoposters :)
 
     #Maybe?:
       Open source?
+    
+    #Makes me think:
+      https://github.com/OpenIB/OpenIB/ wow what a shitty device
+      https://github.com/OpenIB/OpenIB/blob/master/board-search.php search make me thinke
