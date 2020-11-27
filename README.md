@@ -48,6 +48,7 @@ The website will then open in your browser and you are free to make changes :) M
       metrics for each thread on the catalog
       make catalog grid instead of list :)
         make it a dynamic list also
+      TESTING
 
 
     Future:
