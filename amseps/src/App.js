@@ -10,6 +10,7 @@ import ViewThread from "./components/view_thread.component.js";
 
 //remember that 3000 is for React elements, 5000 is for DB lelements
 function App() {
+
   return (
     <Router>
       <Navbar />

@@ -48,8 +48,9 @@ router.route('/:id').get((req, res) => { //if GET <host>/thread/threadid -> do t
 });
 
 router.route('/:id/replies').get((req, res) => {
+    console.log('Route: /thread/' + req.params.id + '/replies');
     Reply.find({ //find with params
-            'parent_thread': ':id'
+            'parent_thread': req.params.id
         },
         'body_text reply_title name reply_number post_date reply_image reply_votes'
     ).then(replies =>{
