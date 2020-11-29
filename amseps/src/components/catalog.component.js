@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
-import {Link} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Link} from "react-router-dom";
 import PostThread from './post_thread.component';
 import axios from 'axios';
+
+import ViewThread from "./view_thread.component.js";
 
 export default class Catalog extends Component{
     constructor(props){
@@ -22,13 +24,13 @@ export default class Catalog extends Component{
             console.log(res.data);
             this.setState({threads: res.data});
         });
-        console.log("STATE: " + this.state.threads);
+        console.log("Loaded Threads: " + this.state.threads);
     }
 
     enterThread(e, thread){
         e.preventDefault();
-        console.log("Clicked thread: " + thread);
-        window.location = ("http://localhost:5000/thread/" + thread._id);
+        console.log("Clicked thread: " + thread._id);
+        window.location = ("http://localhost:3000/thread/" + thread._id);
     }
 
     render(){
