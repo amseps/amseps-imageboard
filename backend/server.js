@@ -22,8 +22,18 @@ mongoose.connect(uri, {
     useUnifiedTopology: true
 });
 const connection = mongoose.connection;
+
+
+//how do promises work?: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise 
 connection.once('open', () =>{ // *once it has made the connection*
     console.log("MongoDB database connection established succesfully");
+    console.log(connection.port + " : " + connection.name);
+}).on('error', err =>{
+    console.log("ERROR Failed Connection: " + err);
+}).on('disconnected', err=> {
+    console.log("Disconnected from DB: " + err);
+}).on('reconnected', err => {
+    console.log("Reconnected to DB: " + err);
 })
 
 //routes , controlling over models in /models
@@ -38,4 +48,5 @@ app.use('/world', worldRouter);
 
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);
+    console.log("Host:" + app.host);
 });
