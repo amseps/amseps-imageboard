@@ -3,6 +3,8 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 
+
+
 //see file: .env ; Imported as [npm install dotenv]
 require('dotenv').config();
 
@@ -58,6 +60,8 @@ connection.once('open', () =>{ // *once it has made the connection*
     console.log("Reconnected to DB: " + err);
 })
 
+
+
 //routes , controlling over models in /models
 const threadRouter = require('./routes/thread');
 const worldRouter = require('./routes/world');
@@ -65,6 +69,8 @@ const worldRouter = require('./routes/world');
 //when someone goes to /reply , it goes to everything in the replyRouter
 app.use('/thread', threadRouter);
 app.use('/world', worldRouter);
+
+
 
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);

@@ -40,13 +40,25 @@ const threadSchema = new Schema({
         required: true,
         unique: false,
     },
-    thread_image:{
+    thread_image:{ //https://www.positronx.io/react-file-upload-tutorial-with-node-express-and-multer/ 
         type: String, //the location of the image :()
         required: false,
         unique: false,
-        trim: false, 
-        min: 4,
+        trim: true, 
+        min: 1,
         max: 128
+    },
+    thread_image_type:{
+        type: String,
+        required: false,
+        unique: false,
+        trim: true
+    },
+    thread_image_filename:{
+        type: String,
+        required: false,
+        unique: false,
+        trim: true
     },
     thread_votes:{ //contains individual votes
         red: Number, 
@@ -64,7 +76,8 @@ const threadSchema = new Schema({
     archived:{
         type: Boolean,
         required: true
-    }
+    },
+
 },{
     timestamps: true
 });

@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 
-import FileUploader from './FileUploader.component';
-
 export default class PostThread extends Component{
 
     constructor(props){
@@ -14,6 +12,7 @@ export default class PostThread extends Component{
         this.changeName = this.changeName.bind(this);
         this.changeBodyText = this.changeBodyText.bind(this);
         this.changeImage = this.changeImage.bind(this);
+
         this.onDrop = this.onDrop.bind(this);
 
 
@@ -24,7 +23,6 @@ export default class PostThread extends Component{
             title: "",
             name: "",
             thread_image: "",
-            pictures: [],
         };
     }
 
@@ -46,7 +44,7 @@ export default class PostThread extends Component{
     
     changeImage(e){
         this.setState({
-            thread_image: e.target.value
+            thread_image: e.target.files[0]
         });
     }
     
@@ -55,17 +53,30 @@ export default class PostThread extends Component{
             name: e.target.value
         });
     }
+
     submitThread(e){
         //TODOL put in checks for goode data
         e.preventDefault();
         console.log("SUBMIT THREAD");
-        const newThread = {
-            body_text: this.state.body_text,
-            thread_title: this.state.title,
-            name: this.state.name,
-            thread_image: this.state.thread_image,
+        let formData = new FormData();
+        formData.append('thread_image', this.state.thread_image);
+        formData.append('body_text', this.state.body_text);
+        formData.append('name', this.state.name);
+        formData.append('thread_title', this.state.title)
+        formData.append('test-field', 'test-data');
+        console.log(formData.getAll);
+        console.log(formData.entries());
+        console.log(formData.get(0));
+
+        for (var key of formData.entries()) {
+            console.log(key[0] + ', ' + key[1]);
         }
-        axios.post('http://localhost:5000/thread/post_thread', newThread)
+
+        const config = {     
+            headers: { 'content-type': 'multipart/form-data',  "enctype":"multipart/form-data"}
+        }
+
+        axios.post('http://localhost:5000/thread/post_thread', formData, config)
         .then(res =>{
             console.log("Thread posted succesfully: ");
             console.log(res.data);
@@ -75,9 +86,9 @@ export default class PostThread extends Component{
         })
     }
 
-    onDrop(picture) {
+    onDrop(thread_image) {
         this.setState({
-            pictures: this.state.pictures.concat(picture),
+            thread_image: this.state.pictures.concat(thread_image),
         });
     }
 
@@ -85,8 +96,14 @@ export default class PostThread extends Component{
         return(
             <div>
                 <h3>Post New Thread</h3>
-                <FileUploader />
                 <form onSubmit={this.submitThread}>
+                    <div className="form-group">
+                        <input type="file" 
+                        required
+                        className="form-control"
+                        onChange={this.changeImage}
+                        />
+                    </div>
                     <div className="form-group">
                         <input type="text"
                         placeholder="title"
@@ -101,14 +118,6 @@ export default class PostThread extends Component{
                         required className="form-control"
                         value={this.state.name}
                         onChange={this.changeName}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <input type="text"
-                        placeholder="image"
-                        required className="form-control"
-                        value={this.state.thread_image}
-                        onChange={this.changeImage}
                         />
                     </div>
                     <div className="form-group">

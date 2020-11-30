@@ -83,8 +83,10 @@ export default class ViewThread extends Component{
                 }
                 {   !this.state.error_message && //IF Don't display error message
                     <div>
+                        <img alt={noimage} />
                         <Figure>
-                            <Figure.Image src={noimage} alt="thread image"/>
+                            <Figure.Image src={this.state.thread_head.thread_image} alt={noimage}/>
+                            image: {this.state.thread_head.thread_image}
                             <Figure.Caption>
                                 <h1> [{this.state.thread_head.thread_number}]{this.state.thread_head.thread_title}</h1>
                                 <b>{this.state.thread_head.name}</b>
