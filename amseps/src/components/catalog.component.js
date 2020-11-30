@@ -12,6 +12,7 @@ export default class Catalog extends Component{
         //register functions
         this.componentDidMount = this.componentDidMount.bind(this);
         this.enterThread = this.enterThread.bind(this);
+        this.refreshThreads = this.refreshThreads.bind(this);
 
         this.state = {
             threads: []
@@ -19,18 +20,24 @@ export default class Catalog extends Component{
     }
 
     componentDidMount(){
-        axios.get("http://localhost:5000/thread")
-        .then(res =>{
-            console.log(res.data);
-            this.setState({threads: res.data});
-        });
-        console.log("Loaded Threads: " + this.state.threads);
+        this.refreshThreads();
     }
 
     enterThread(e, thread){
         e.preventDefault();
         console.log("Clicked thread: " + thread._id);
         window.location = ("http://localhost:3000/thread/" + thread._id);
+    }
+
+    refreshThreads(){
+        axios.get("http://localhost:5000/thread")
+        .then(res =>{
+            console.log(res.data);
+            this.setState({
+                threads: (res.data).sort((a,b) => a.updatedAt < b.updatedAt ? 1 : -1) //inserts into state and sorts
+            });
+        });
+        console.log("Loaded Threads: " + this.state.threads);
     }
 
     render(){

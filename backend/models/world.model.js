@@ -9,6 +9,13 @@ const worldShema = new Schema({
         unique: true,
         min: 1,
         max: Infinity
+    },
+    reply_number:{
+        type: Number,
+        required: true,
+        unique: true,
+        min: 1,
+        max: Infinity,
     }
 },{
     timestamps: true

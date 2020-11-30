@@ -54,6 +54,16 @@ const threadSchema = new Schema({
         clover: Number,
         fire: Number,
         melon: Number
+    },
+    number_of_replies:{
+        type: Number,
+        unique: false,
+        min: 0,
+        max: Infinity
+    },
+    archived:{
+        type: Boolean,
+        required: true
     }
 },{
     timestamps: true

@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
-import {Link} from 'react-router-dom';
 import axios from 'axios';
-
-import PropTypes from 'prop-types';
-
 import Figure from 'react-bootstrap/Figure'
+
+import PostReply from './post_reply.component';
+
+import noimage from './../common_images/noimage.png';
 
 export default class ViewThread extends Component{
 
@@ -74,23 +74,28 @@ export default class ViewThread extends Component{
                 }
                 {   !this.state.error_message && //IF Don't display error message
                     <div>
-                        <Figure className>
-                            <Figure.Image alt="no image" src="abcde.png"/>
+                        <Figure>
+                            <Figure.Image src={noimage} alt="thread image"/>
                             <Figure.Caption>
-                                <h1>{this.state.thread_head.thread_title} {this.state.thread_head.id}</h1>
+                                <h1> [{this.state.thread_head.thread_number}]{this.state.thread_head.thread_title}</h1>
                                 <b>{this.state.thread_head.name}</b>
                                 <p>{this.state.thread_head.body_text}</p>
                             </Figure.Caption>
                         </Figure>
                         penis:{this.state.replies.length}
+                        <ul className="list list-unstyled">
                         {
-                            this.state.replies.map((reply) => (
-                                <div>
-                                    sex havers:
-                                    <b>{reply.body_text}</b>
-                                </div>
-                            ))
-                        }
+                                this.state.replies.map((reply) => (
+                                    <li key={reply.reply_number}
+                                    className="empty"
+                                    >
+                                        <p>{reply.name}</p>
+                                        <b>{reply.body_text}</b>
+                                    </li>
+                                ))
+                            }
+                        </ul>
+                        <PostReply parentId={this.state.thread_id}/>
                     </div>
                 }
             </div>

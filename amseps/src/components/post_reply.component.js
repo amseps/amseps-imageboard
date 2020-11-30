@@ -2,93 +2,73 @@ import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import axios from 'axios';
 
-export default class PostThread extends Component{
+export default class PostReply extends Component{
 
     constructor(props){
         super(props);
 
         //register functions with this
-        this.submitThread = this.submitThread.bind(this);
-        this.changeTitle = this.changeTitle.bind(this);
+        this.submitReply = this.submitReply.bind(this);
         this.changeName = this.changeName.bind(this);
         this.changeBodyText = this.changeBodyText.bind(this);
         this.changeImage = this.changeImage.bind(this);
 
-
-
         this.state={
             error_text: "",
             body_text: "",
-            title: "",
             name: "",
-            thread_image: "",
+            reply_image: "",
         };
     }
 
     componentDidMount(){
 
     }
-
     changeBodyText(e){
         this.setState({
             body_text: e.target.value
         });
     }
-
-    changeTitle(e){
-        this.setState({
-            title: e.target.value
-        });
-    }
-    
     changeImage(e){
         this.setState({
-            thread_image: e.target.value
+            reply_image: e.target.value
         });
     }
-    
     changeName(e){
         this.setState({
             name: e.target.value
         });
     }
-    submitThread(e){
-        //TODOL put in checks for goode data
+    submitReply(e){
         e.preventDefault();
-        console.log("SUBMIT THREAD");
-        const newThread = {
+        console.log("Submitting Reply");
+        const newReply = {
             body_text: this.state.body_text,
-            thread_title: this.state.title,
             name: this.state.name,
-            thread_image: this.state.thread_image,
+            reply_image: this.state.reply_image,
         }
-        axios.post('http://localhost:5000/thread/post_thread', newThread)
+        if(newReply.body_text === "") newReply.body_text= "anon";
+        console.log("going to post reply");
+        console.log(newReply);
+        axios.post("http://localhost:5000/thread/" + this.props.parentId + "/post_reply", newReply)
         .then(res =>{
-            console.log("Thread posted succesfully: ");
+            console.log("Reply posted succesfully: ");
             console.log(res.data);
         })
         .catch(e => {
-            console.log("Post Thread Error: " + e);
+            console.log("Post Reply Error: " + e);
         })
     }
 
     render(){
         return(
-            <div>
-                <h3>Post New Thread</h3>
-                <form onSubmit={this.submitThread}>
-                    <div className="form-group">
-                        <input type="text"
-                        placeholder="title"
-                        required className="form-control"
-                        value={this.state.title}
-                        onChange={this.changeTitle}
-                        />
-                    </div>
+            <div className="container">
+                <h6>Reply</h6>
+                <form onSubmit={this.submitReply}>
                     <div className="form-group">
                         <input type="text"
                         placeholder="name"
-                        required className="form-control"
+                        className="form-control"
                         value={this.state.name}
                         onChange={this.changeName}
                         />
@@ -97,7 +77,7 @@ export default class PostThread extends Component{
                         <input type="text"
                         placeholder="image"
                         required className="form-control"
-                        value={this.state.thread_image}
+                        value={this.state.reply_image}
                         onChange={this.changeImage}
                         />
                     </div>
@@ -110,7 +90,7 @@ export default class PostThread extends Component{
                         />
                     </div>
                     <div className="form-group">
-                        <input type="submit" value="Post Thread" className="btn btn-primary" />
+                        <input type="submit" value="Post Reply" className="btn btn-primary" />
                     </div>
                 </form>
             </div>

@@ -11,14 +11,6 @@ const replySchema = new Schema({
         minlength: 1,
         maxlength: 2047,
     },
-    reply_title:{
-        type: String,
-        required: false,
-        unique: false,
-        trim: true,
-        minlength: 0,
-        maxlength: 64
-    },
     name:{
         type: String, 
         required: false,
@@ -26,6 +18,13 @@ const replySchema = new Schema({
         trim: true,
         minlength: 1,
         maxlength: 32
+    },
+    local_reply_number:{
+        type: Number,
+        required: true,
+        unique: false,
+        min:1, 
+        max: Infinity
     },
     reply_number:{
         type: Number,
