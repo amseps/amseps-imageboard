@@ -61,11 +61,8 @@ router.route('/:id').get((req, res) => { //if GET <host>/thread/threadid -> do t
 
 router.route('/:id/replies').get((req, res) => {
     console.log('Route: /thread/' + req.params.id + '/replies');
-    Reply.find({ //find with params
-            'parent_thread': req.params.id
-        },
-        'body_text reply_title name reply_number post_date reply_image reply_votes'
-    ).then(replies =>{
+    Reply.find({'parent_thread': req.params.id}).
+    then(replies =>{
         res.json(replies);
     }).catch(err=>{
         res.status(400).json('Error ' + err);
@@ -81,7 +78,7 @@ router.route('/:id/post_reply').post((req, res) => {
         .then(par_thread => {
             World.findOne({})
             .then(par_this_world =>{
-                World.findOneAndUpdate({}, {reply_number: par_this_world+1})
+                World.findOneAndUpdate({}, {reply_number: par_this_world.reply_number+1}, {useFindAndModify: false, new: true})
                 .then(this_world => {
                     const ReplyData={
                         body_text: req.body.body_text,

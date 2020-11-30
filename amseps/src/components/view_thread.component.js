@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-import Figure from 'react-bootstrap/Figure'
+import Figure from 'react-bootstrap/Figure';
 
 import PostReply from './post_reply.component';
 
@@ -14,13 +14,15 @@ export default class ViewThread extends Component{
         const active = (this.props.match && this.props.match.params && this.props.match.params.id);
 
         this.refreshPage = this.refreshPage.bind(this);
+        this.onDrop = this.onDrop.bind(this);
 
         this.state = {
             thread_head: {},
             replies: [{}],
             error_message: false,
             defined: active,
-            thread_id: -1
+            thread_id: -1,
+            pictures: [],
         }
     }
 
@@ -65,6 +67,13 @@ export default class ViewThread extends Component{
         }
     }
 
+    onDrop(picture) {
+        this.setState({
+            pictures: this.state.pictures.concat(picture),
+        });
+    }
+ 
+
     render(){
         return(
             <div>
@@ -82,17 +91,17 @@ export default class ViewThread extends Component{
                                 <p>{this.state.thread_head.body_text}</p>
                             </Figure.Caption>
                         </Figure>
-                        penis:{this.state.replies.length}
+                        <br/><i>Replies to this thread:{this.state.replies.length}</i>
                         <ul className="list list-unstyled">
                         {
-                                this.state.replies.map((reply) => (
-                                    <li key={reply.reply_number}
+                                this.state.replies.map((reply) => 
+                                    <li key={reply._id}
                                     className="empty"
                                     >
-                                        <p>{reply.name}</p>
+                                        <p><b>[{reply.local_reply_number} / {reply.reply_number}]{reply.name}</b></p>
                                         <b>{reply.body_text}</b>
                                     </li>
-                                ))
+                                )
                             }
                         </ul>
                         <PostReply parentId={this.state.thread_id}/>

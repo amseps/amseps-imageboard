@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import {Link} from 'react-router-dom';
 import axios from 'axios';
+
+import FileUploader from './FileUploader.component';
 
 export default class PostThread extends Component{
 
@@ -13,6 +14,7 @@ export default class PostThread extends Component{
         this.changeName = this.changeName.bind(this);
         this.changeBodyText = this.changeBodyText.bind(this);
         this.changeImage = this.changeImage.bind(this);
+        this.onDrop = this.onDrop.bind(this);
 
 
 
@@ -22,6 +24,7 @@ export default class PostThread extends Component{
             title: "",
             name: "",
             thread_image: "",
+            pictures: [],
         };
     }
 
@@ -72,10 +75,17 @@ export default class PostThread extends Component{
         })
     }
 
+    onDrop(picture) {
+        this.setState({
+            pictures: this.state.pictures.concat(picture),
+        });
+    }
+
     render(){
         return(
             <div>
                 <h3>Post New Thread</h3>
+                <FileUploader />
                 <form onSubmit={this.submitThread}>
                     <div className="form-group">
                         <input type="text"
