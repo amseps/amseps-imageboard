@@ -38,7 +38,10 @@ The website will then open in your browser and you are free to make changes :) M
     Mongodb basics
     Routes and Models basics
     GET and POST basics for Threads only
-
+    Work on giving replies to Threads
+    Replies to threads!
+    Reply numbers!
+    Images :
 
   	#TODO:
 
@@ -49,13 +52,13 @@ The website will then open in your browser and you are free to make changes :) M
       make catalog grid instead of list :)
         make it a dynamic list also
       TESTING
+      FIX THE STYLING O M G
+      Add extra routing for images ?
+      Images for replies
 
 
     Future:
-      Work on giving replies to Threads
-        Replies to threads!
-        Reply numbers!
-          Linking between threads make easy
+      Linking between threads make easy
       Mini-votes:
         gold -> gold/brown, sparkle -> white/purple, clover -> green/black, fire -> red/orange, melon ->pink/green
           Threads and replies are able to be voted on.
@@ -70,12 +73,6 @@ The website will then open in your browser and you are free to make changes :) M
           Notes only have one vote option , red circle
       Little threads functions
         Like cool clicks on fings idk lolle
-      Images https://www.npmjs.com/package/react-images-upload 
-        I imagine that self hosting is cheaper than cloudinary or something
-          Maybe do this earlier idke lole
-        Also making thumbnails of images
-        getting a unique address for images , secretly it may not be that tough
-          like {thread._id}_{reply._id} or thread_num / reply_num
       Admin controls
         Delete Threads
         Edit threads
