@@ -63,6 +63,7 @@ export default class Catalog extends Component{
                                     <b>{thread.thread_title}</b>
                                 </button>
                                 </div>
+                                <img src={"http://localhost:5000/thread/"+thread._id+"/image"} />
                                 {thread.body_text}
                                 
                             </li>

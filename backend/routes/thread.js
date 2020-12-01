@@ -38,14 +38,23 @@ const upload = multer({storage: storage, fileFilter: fileFilter});
 
 router.get("/:id/image", (req, res) => {
     console.log("Want Thread Image");
-    Thread.findOne({_id: req.params.id}, (err, thread) => {
-        console.log(thread);
-        res.set("Content-Type", thread.thread_image_type);
-        console.log(thread.thread_image);
-        //console.log(res);
-        res.send(fs.readFileSync("./images/" + thread.thread_image_filename));
+    Thread.findById(req.params.id)
+    .then((thread, err) => {
+        if(thread){
+            console.log(thread);
+            res.set("Content-Type", thread.thread_image_type);
+            console.log(thread.thread_image);
+            //console.log(res);
+            res.send(fs.readFileSync("./images/" + thread.thread_image_filename));
+        }else{
+            console.log("Couldn't find the image");
+            res.set("Content-Type", "image/png");
+            res.send(fs.readFileSync("./images/common_images/noimage.png"));
+        }
     }).catch(err =>{
-        console.log("Couldn't find the image");
+        console.log("Couldn't find the image err: " + err);
+        res.set("Content-Type", "image/png");
+        res.send(fs.readFileSync("./images/common_images/noimage.png"));
     })
 });
 
@@ -57,11 +66,12 @@ router.post('/post_thread', upload.single('thread_image'),(req, res, next) => { 
                 const threadNum = doc.thread_number;
                 const url = req.protocol + '://' + req.get('host');
                 const filename = "abcde";
+                const postername = (req.body.name) ? req.body.name : "anon";
                 const ThreadData={
                     //passed in vvv
                     body_text: req.body.body_text,
                     thread_title: req.body.thread_title,
-                    name: req.body.name,
+                    name: postername,
                     thread_image: url + '/images/' + req.file.filename,
                     thread_image_type: req.file.mimetype,
                     thread_image_filename: req.file.filename,
@@ -123,7 +133,6 @@ router.route('/:id/replies').get((req, res) => {
 
 router.route('/:id/post_reply').post((req, res) => {
     console.log("Cool New Reply");
-
     Thread.findOne({_id: req.params.id})
     .then(up_par_thread => {
         Thread.findOneAndUpdate({_id: req.params.id}, {number_of_replies: up_par_thread.number_of_replies+1}, {new: true, useFindAndModify: false})
@@ -132,13 +141,13 @@ router.route('/:id/post_reply').post((req, res) => {
             .then(par_this_world =>{
                 World.findOneAndUpdate({}, {reply_number: par_this_world.reply_number+1}, {useFindAndModify: false, new: true})
                 .then(this_world => {
+                    const postname = (req.body.name) ? req.body.name : "anon";
                     const ReplyData={
                         body_text: req.body.body_text,
-                        reply_title: req.body.reply_title,
-                        name: req.body.name,
+                        name: postname,
                         parent_thread: req.params.id,
-                        reply_number: par_thread.number_of_replies, // all we had to get :(
-                        local_reply_number: this_world.reply_number, // and this :(
+                        local_reply_number: par_thread.number_of_replies, // all we had to get :(
+                        reply_number: this_world.reply_number, // and this :(
                         post_date: new Date(),
                         reply_image: req.body.reply_image, 
                         reply_votes: {
@@ -149,6 +158,7 @@ router.route('/:id/post_reply').post((req, res) => {
                             melon: 0
                         }
                     }
+                    console.log(ReplyData);
                     const newReply = new Reply(ReplyData);
                     newReply.save()
                     .then(() => {

@@ -76,7 +76,7 @@ export default class PostReply extends Component{
                     <div className="form-group">
                         <input type="text"
                         placeholder="image"
-                        required className="form-control"
+                        className="form-control"
                         value={this.state.reply_image}
                         onChange={this.changeImage}
                         />

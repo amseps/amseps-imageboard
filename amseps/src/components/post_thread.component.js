@@ -115,7 +115,7 @@ export default class PostThread extends Component{
                     <div className="form-group">
                         <input type="text"
                         placeholder="name"
-                        required className="form-control"
+                        className="form-control"
                         value={this.state.name}
                         onChange={this.changeName}
                         />
