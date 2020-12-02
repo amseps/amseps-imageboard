@@ -42,29 +42,30 @@ The website will then open in your browser and you are free to make changes :) M
     Replies to threads!
     Reply numbers!
     Images :
-
-  	#TODO:
-
-    Actionable:
-      Give threads a datafield for number of replies
+          Give threads a datafield for number of replies
       run everything client side fuck these kidz
       metrics for each thread on the catalog
       make catalog grid instead of list :)
         make it a dynamic list also
+    FIX THE STYLING O M G
+
+  	#TODO:
+
+    Actionable:
+      Finish styling of replies
       TESTING
-      FIX THE STYLING O M G
       Add extra routing for images ?
       Images for replies
-
-
-    Future:
-      Linking between threads make easy
-      Mini-votes:
+    Mini-votes:
         gold -> gold/brown, sparkle -> white/purple, clover -> green/black, fire -> red/orange, melon ->pink/green
           Threads and replies are able to be voted on.
           These votes have no real meaning , but they do display a cool number that you can click up to ... five? times per person
           Five different types of votes, each with a color
           This is more for fun
+      Add an icon!
+
+    Future:
+      Linking between threads make easy
       Notes:
         Notes are brief messages you can leave that will directly tail a post
           No images allowed, like 128 characters max
@@ -72,7 +73,13 @@ The website will then open in your browser and you are free to make changes :) M
         Notes on anything
           Notes only have one vote option , red circle
       Little threads functions
-        Like cool clicks on fings idk lolle
+        Like cool clicks on fings idk loll
+      When replied
+        Able to peek at what the thread they are replying to is
+          Meaning: on hover show the post, AND show a small note afterwards of what the post says 
+            IE: ">>>134590 [OP here does anyone else think that....]"
+      Add styling to headerbar
+        Like on hover AMSEPS change color
       Admin controls
         Delete Threads
         Edit threads
@@ -84,10 +91,23 @@ The website will then open in your browser and you are free to make changes :) M
             Although it appears that CRUD security should be handled through mongodb controls rather than server.js
         Using Captchas for posts https://www.npmjs.com/package/react-google-recaptcha
           https://www.npmjs.com/package/react-google-recaptcha-v3 
+        Better stability in recieving posts
+        Error messages for post failures
+        Better clientside controls to help the user post the correct things
       Search
         Searching a catalog for individual threads
         Or a thread for replies?
         Or maybe both at tha same time
+      Variable title?
+        Based on how many 'notifications' are in current thread
+      Loading circles , various loading states
+      Need thumbnails for images
+      Rewrite Error log for backend,
+        Also make it return more proper jsons from response
+      Reload page on upload
+        (or just add new reply to the state)
+      Add a better 'refresh' button than just refreshing page
+      Have Badges turn red when there is a new recent post from catalog
       Archiving old threads? How will it work
         Just have a field like archived: true
         xd
@@ -104,6 +124,7 @@ The website will then open in your browser and you are free to make changes :) M
       Other individualizations
         Make that shit SEXY 
           THINK
+      Server automatically archives old content
       Make static pages
         Homepage ?: maybe some dynamic lelements on that page
         Rules page
