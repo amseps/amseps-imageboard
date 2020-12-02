@@ -1,0 +1,129 @@
+.c-no-rounded-corners{
+    border-radius: 0;
+}
+
+.c-border{
+    border: 1px solid black;
+}
+.c-border-light{
+    border: 1px solid rgb(191,191,191);
+}
+.c-border-red{
+    border: 1px solid #ff0000;
+}
+
+.c-br-drop-shadow{
+    box-shadow: 2px 2px;
+}
+
+.c-drop-shadow{
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.c-drop-shadow-sm{
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+}
+
+.c-padding-sm{
+    padding: 1%;
+}
+
+.c-padding-md{
+    padding: 4%;
+}
+
+.c-underline{
+    border-bottom: 1px solid black;
+}
+.c-border-sides{
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+}
+
+.c-no-vert-margins{
+    margin-bottom: 0 !important;
+    margin-top: 0 !important;
+}
+
+.c-list{
+    list-style: none;
+}
+
+.c-body-input{
+    height: 10vh;
+}
+
+.c-subtitle{
+    font-size: 75% !important;
+}
+
+.c-width{
+    width:100%;
+}
+
+.c-clickable{
+    background-color: white;
+    -moz-transition: all .1s ease-in;
+    -o-transition: all .1s ease-in;
+    -webkit-transition: all .1s ease-in;
+    transition: all .1s ease-in;
+}
+.c-clickable:hover{
+    cursor: pointer;
+    background-color: #f5f5f5;
+}
+.c-clickable2{
+    background-color: inherit;
+    -moz-transition: all .1s ease-in;
+    -o-transition: all .1s ease-in;
+    -webkit-transition: all .1s ease-in;
+    transition: all .1s ease-in;
+    box-shadow: none;
+}
+.c-clickable2:hover{
+    background-color: #E5E5E5;
+}
+
+.c-hoverable{
+    background-color: white;
+    -moz-transition: all .1s ease-in;
+    -o-transition: all .1s ease-in;
+    -webkit-transition: all .1s ease-in;
+    transition: all .1s ease-in;
+}
+.c-hoverable:hover{
+    background-color: #f5f5f5;
+}
+.c-hoverable2{
+    background-color: inherit;
+    -moz-transition: all .1s ease-in;
+    -o-transition: all .1s ease-in;
+    -webkit-transition: all .1s ease-in;
+    transition: all .1s ease-in;
+    box-shadow: none;
+}
+.c-hoverable2:hover{
+    background-color: #E5E5E5;
+}
+.c-hoverable3{
+    background-color: inherit;
+    -moz-transition: all .1s ease-in;
+    -o-transition: all .1s ease-in;
+    -webkit-transition: all .1s ease-in;
+    transition: all .1s ease-in;
+    box-shadow: none;
+}
+.c-hoverable3:hover{
+    background-color: #D5D5D5;
+}
+.c-hoverable4{
+    background-color: inherit;
+    -moz-transition: all .1s ease-in;
+    -o-transition: all .1s ease-in;
+    -webkit-transition: all .1s ease-in;
+    transition: all .1s ease-in;
+    box-shadow: none;
+}
+.c-hoverable4:hover{
+    background-color: #C5C5C5;
+}

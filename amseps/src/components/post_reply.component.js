@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import axios from 'axios';
 
+import noimage from './../common_images/noimage.png';
+
 export default class PostReply extends Component{
 
     constructor(props){

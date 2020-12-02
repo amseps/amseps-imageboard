@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-import Figure from 'react-bootstrap/Figure';
+import {Link} from "react-router-dom";
+import Util from './../utility';
 
 import PostReply from './post_reply.component';
 
@@ -18,12 +19,13 @@ export default class ViewThread extends Component{
 
         this.state = {
             thread_head: {},
-            replies: [{}],
+            replies: [{_id:""}],
             error_message: false,
             defined: active,
             thread_id: -1,
             pictures: [],
         }
+
     }
 
     componentDidMount(){
@@ -49,7 +51,6 @@ export default class ViewThread extends Component{
                 });
                 axios.get("http://localhost:5000/thread/" + new_id + "/replies")
                 .then(replies => {
-                    console.log(replies.data);
                     this.setState({
                         replies: replies.data,
                         error_message: false
@@ -77,30 +78,37 @@ export default class ViewThread extends Component{
     render(){
         return(
             <div>
-                <div>View Thread: {this.state.thread_id}</div>
                 {   this.state.error_message && // If display error message
-                    <div>Failed to Load Threads</div>
+                    <div className="container c-border">
+                        <div>Failed to Load Thread: {this.state.thread_head._id}</div>
+                        <img src={noimage} alt="None"/>
+                        <Link to="/">Return to Catalog</Link>
+                    </div>
                 }
                 {   !this.state.error_message && //IF Don't display error message
-                    <div>
-                        <img src={noimage} />
-                        <Figure>
-                            <Figure.Image src={"http://localhost:5000/thread/"+this.state.thread_head._id+"/image"} alt={noimage}/>
-                            looking for: {"http://localhost:5000/thread/"+this.state.thread_head._id+"/image"}
-                            <Figure.Caption>
-                                <h1> [{this.state.thread_head.thread_number}]{this.state.thread_head.thread_title}</h1>
-                                <b>{this.state.thread_head.name}</b>
-                                <p>{this.state.thread_head.body_text}</p>
-                            </Figure.Caption>
-                        </Figure>
+                    <div className="container">
+                        <div className="c-border c-hoverable" style={{padding:"2vw"}}>
+                            <img src={"http://localhost:5000/thread/"+this.state.thread_head._id+"/image"} alt="Thread" className="c-border c-drop-shadow" style={{maxWidth:"100%"}}/>
+                            <div className="c-border-sides c-hoverable2">
+                                <h1 className="c-hoverable3 width container" style={{marginTop:"1vh"}}> {this.state.thread_head.thread_title}</h1>
+                                <p className="c-hoverable3 width container c-subtitle">
+                                    <span className="c-hoverable4" title={"Thread Number: " + this.state.thread_head.thread_number}>[{this.state.thread_head.thread_number}]</span>
+                                    <span className="c-hoverable4" style={{marginLeft:"1vw"}} title={"Posted On: " +Date(this.state.thread_head.createdAt)}>[{Util.timeSince(this.state.thread_head.createdAt)} ago]</span>
+                                    <span className="c-hoverable4" style={{marginLeft:"1vw"}} title={"Poster Name: " + this.state.thread_head.name}>[{this.state.thread_head.name}]</span>
+
+                                </p>
+                                <p className="c-hoverable3 width container" style={{minHeight:"8vh"}}>{this.state.thread_head.body_text}</p>
+                            </div>
+                        </div>
                         <br/><i>Replies to this thread:{this.state.replies.length}</i>
                         <ul className="list list-unstyled">
                         {
-                                this.state.replies.map((reply) => 
-                                    <li key={reply._id}
-                                    className="empty"
+                                this.state.replies.map((reply, index) => 
+                                    <li 
+                                    key={reply._id}
+                                    className="c-border"
                                     >
-                                        <p><b>[{reply.local_reply_number} / {reply.reply_number}]{reply.name}</b></p>
+                                        <b>[{reply.local_reply_number} / {reply.reply_number}]{reply.name}</b>
                                         <b>{reply.body_text}</b>
                                     </li>
                                 )

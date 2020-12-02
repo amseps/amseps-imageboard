@@ -1,10 +1,11 @@
 import React from 'react';
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./css/custom.css";
 
 import Navbar from "./components/navbar.component.js";
 import Catalog from "./components/catalog.component.js";
-import PostThread from "./components/post_thread.component.js";
+//import PostThread from "./components/post_thread.component.js";
 import ViewThread from "./components/view_thread.component.js";
 import error_404 from './components/error_404.js';
 

@@ -1,9 +1,7 @@
 import React, {Component} from 'react';
-import {BrowserRouter as Router, Route, Link} from "react-router-dom";
 import PostThread from './post_thread.component';
 import axios from 'axios';
-
-import ViewThread from "./view_thread.component.js";
+import Util from './../utility';
 
 export default class Catalog extends Component{
     constructor(props){
@@ -25,19 +23,16 @@ export default class Catalog extends Component{
 
     enterThread(e, thread){
         e.preventDefault();
-        console.log("Clicked thread: " + thread._id);
         window.location = ("http://localhost:3000/thread/" + thread._id);
     }
 
     refreshThreads(){
         axios.get("http://localhost:5000/thread")
         .then(res =>{
-            console.log(res.data);
             this.setState({
                 threads: (res.data).sort((a,b) => a.updatedAt < b.updatedAt ? 1 : -1) //inserts into state and sorts
             });
         });
-        console.log("Loaded Threads: " + this.state.threads);
     }
 
     render(){
@@ -46,30 +41,38 @@ export default class Catalog extends Component{
                 <PostThread props={this.state.threads} />
                 Catalog
                 Numthreads: {this.state.threads.length}
-                <ul className="list-group">
-                    {
-                        this.state.threads.map((thread) => (
-                            <li 
-                            key={thread._id} 
-                            className="list-group-item d-flex justify-content-between list-group-item-action flex-column align-items-start"
-                            onClick={(e) => this.enterThread(e, thread)}
-                            >
-                                <div className="row">
-                                <span className="badge badge-primary justify-content-center">{thread.thread_votes.green}5</span>
-                                <button 
-                                onClick={(e) => this.enterThread(e, thread)}
-                                className="btn btn-outline-secondary"
-                                >
-                                    <b>{thread.thread_title}</b>
-                                </button>
+                <div className="container-fluid">
+                    <ul className="d-flex flex-wrap justify-content-md-around align-content-stretch align-items-center">
+                        {
+                            this.state.threads.map((thread) => (
+                                <div style={{marginBottom: '1.5%'}} key={thread._id}>
+                                    <li 
+                                    key={thread._id} 
+                                    className="container c-list c-padding-md c-clickable c-border c-drop-shadow"
+                                    onClick={(e) => this.enterThread(e, thread)}
+                                    >
+                                        <div className="d-flex justify-content-start align-items-center">
+                                            <span className="badge badge-primary justify-content-center c-no-rounded-corners c-border">{thread.number_of_replies}</span>
+                                            <div  style={{marginLeft:'5%', minWidth:'80%'}}>
+                                                <div className="c-underline c-clickable2"><b>{thread.thread_title}</b></div>
+                                                <div className="c-subtitle">
+                                                    <span className="c-clickable2" title={"Thread Number: " + thread.thread_number}>[{thread.thread_number}]</span>
+                                                    <span className="c-clickable2" title={"Posted On: " + Date(thread.createdAt)} style={{marginLeft: '2%'}}>[{Util.timeSince(thread.createdAt)} ago]</span>
+                                                    <span className="c-clickable2" style={{marginLeft:'2%'}}>[{thread.name}]</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br/>
+                                        <div className="d-flex justify-content-between">
+                                            <img src={"http://localhost:5000/thread/"+thread._id+"/image"} alt="Thread" style={{height:100}} className="c-border c-drop-shadow-sm"/>
+                                            <p className="container">{thread.body_text}</p>
+                                        </div>
+                                    </li>
                                 </div>
-                                <img src={"http://localhost:5000/thread/"+thread._id+"/image"} />
-                                {thread.body_text}
-                                
-                            </li>
-                        ))
-                    }
-                </ul>
+                            ))
+                        }
+                    </ul>
+                </div>
                 Le end
             </div>
         );

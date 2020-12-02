@@ -15,14 +15,14 @@ export default class PostThread extends Component{
 
         this.onDrop = this.onDrop.bind(this);
 
-
-
         this.state={
             error_text: "",
             body_text: "",
             title: "",
             name: "",
             thread_image: "",
+            thread_image_preview: "",
+            counter_classname: "c-border-light",
         };
     }
 
@@ -32,7 +32,8 @@ export default class PostThread extends Component{
 
     changeBodyText(e){
         this.setState({
-            body_text: e.target.value
+            body_text: e.target.value,
+            counter_classname: (this.state.body_text.length < 1024)? "c-border-light" : "c-border-red"
         });
     }
 
@@ -46,6 +47,23 @@ export default class PostThread extends Component{
         this.setState({
             thread_image: e.target.files[0]
         });
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            this.setState({
+                thread_image_preview: reader.result
+            })
+        }
+        if (e.target.files[0]) {
+            reader.readAsDataURL(e.target.files[0]);
+            this.setState({
+                thread_image_preview :reader.result
+            })
+        } 
+        else {
+            this.setState({
+                thread_image_preview: ""
+            })
+        }
     }
     
     changeName(e){
@@ -95,16 +113,9 @@ export default class PostThread extends Component{
     render(){
         return(
             <div>
-                <h3>Post New Thread</h3>
-                <form onSubmit={this.submitThread}>
-                    <div className="form-group">
-                        <input type="file" 
-                        required
-                        className="form-control"
-                        onChange={this.changeImage}
-                        />
-                    </div>
-                    <div className="form-group">
+                <form onSubmit={this.submitThread} className="container">
+                    <h5>Post New Thread</h5>
+                    <div className="form-group c-no-vert-margins">
                         <input type="text"
                         placeholder="title"
                         required className="form-control"
@@ -112,7 +123,7 @@ export default class PostThread extends Component{
                         onChange={this.changeTitle}
                         />
                     </div>
-                    <div className="form-group">
+                    <div className="form-group c-no-vert-margins">
                         <input type="text"
                         placeholder="name"
                         className="form-control"
@@ -120,13 +131,27 @@ export default class PostThread extends Component{
                         onChange={this.changeName}
                         />
                     </div>
-                    <div className="form-group">
-                        <input type="text"
+                    <div className="form-group c-no-vert-margins">
+                        <textarea
                         placeholder="body"
-                        required className="form-control"
+                        required className="form-control d-flex c-body-input mb-auto p-2"
                         value={this.state.body_text}
                         onChange={this.changeBodyText}
+                        style={{minHeight:'70px'}}
                         />
+                    </div>
+                    <div style={{marginTop:'-2.5%', marginLeft:'1%', backgroundColor:"#ffffff", maxWidth:"5vw", paddingLeft:".3vw", backgroundColor:'white'}} className={this.state.counter_classname}>
+                            [{this.state.body_text.length}/1024]
+                    </div>
+                    <div></div>
+                    <div className="form-group c-no-vert-margins">
+                        <input type="file" 
+                        required
+                        className="form-control"
+                        onChange={this.changeImage}
+                        style={{marginTop:'1%'}}
+                        />
+                        <img style={{maxHeight:'30vh', maxWidth:'100%', marginTop:'3%', marginBottom:'3%'}} src={this.state.thread_image_preview} />
                     </div>
                     <div className="form-group">
                         <input type="submit" value="Post Thread" className="btn btn-primary" />
