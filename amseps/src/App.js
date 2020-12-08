@@ -8,6 +8,7 @@ import Catalog from "./components/catalog.component.js";
 //import PostThread from "./components/post_thread.component.js";
 import ViewThread from "./components/view_thread.component.js";
 import error_404 from './components/error_404.js';
+import BottomBar from './components/bottombar.component.js'
 
 
 //remember that 3000 is for React elements, 5000 is for DB lelements
@@ -24,6 +25,7 @@ function App() {
       <Route path="/thread/:id" exact children={(props) => <ViewThread {...props}/>} />
       <Route component={error_404} />
       </Switch>
+      <BottomBar />
     </Router>
   );
 }

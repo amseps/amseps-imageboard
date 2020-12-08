@@ -51,13 +51,30 @@ const replySchema = new Schema({
         min: 4,
         max: 128
     },
+    has_image:{
+        type: Boolean,
+        required: true,
+        default: false,
+    },
+    reply_image_type:{
+        type: String,
+        required: false,
+        unique: false,
+        trim: true
+    },
+    reply_image_filename:{
+        type: String,
+        required: false,
+        unique: false,
+        trim: true
+    },
     reply_votes:{ //contains individual votes
         red: Number, 
         sparkle: Number,
         clover: Number,
         fire: Number,
         melon: Number
-    }
+    },
 },{
     timestamps: true
 });

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
+import Resizer from 'react-image-file-resizer';
 
 export default class PostThread extends Component{
 
@@ -73,7 +74,6 @@ export default class PostThread extends Component{
     }
 
     submitThread(e){
-        //TODOL put in checks for goode data
         e.preventDefault();
         console.log("SUBMIT THREAD");
         let formData = new FormData();
@@ -81,27 +81,33 @@ export default class PostThread extends Component{
         formData.append('body_text', this.state.body_text);
         formData.append('name', this.state.name);
         formData.append('thread_title', this.state.title)
-        formData.append('test-field', 'test-data');
-        console.log(formData.getAll);
-        console.log(formData.entries());
-        console.log(formData.get(0));
-
-        for (var key of formData.entries()) {
-            console.log(key[0] + ', ' + key[1]);
-        }
-
         const config = {     
             headers: { 'content-type': 'multipart/form-data',  "enctype":"multipart/form-data"}
         }
 
-        axios.post('http://localhost:5000/thread/post_thread', formData, config)
-        .then(res =>{
-            console.log("Thread posted succesfully: ");
-            console.log(res.data);
-        })
-        .catch(e => {
-            console.log("Post Thread Error: " + e);
-        })
+        const f = this.state.thread_image;
+        Resizer.imageFileResizer(
+            f,
+            f.width,
+            f.height,
+            f.mimetype,
+            1, //quality
+            0, //rotation
+            uri => {
+                formData.append('thread_image_thumb', uri);
+                axios.post('http://localhost:5000/thread/post_thread', formData, config)
+                .then(res =>{
+                    console.log("Thread posted succesfully: ");
+                    console.log(res.data);
+                })
+                .catch(e => {
+                    console.log("Post Thread Error: " + e);
+                })
+            }
+        );
+
+
+
     }
 
     onDrop(thread_image) {
@@ -147,6 +153,7 @@ export default class PostThread extends Component{
                     <div className="form-group c-no-vert-margins">
                         <input type="file" 
                         required
+                        accept="image/*"
                         className="form-control"
                         onChange={this.changeImage}
                         style={{marginTop:'1%'}}

@@ -73,7 +73,6 @@ export default class Catalog extends Component{
                         }
                     </ul>
                 </div>
-                Le end
             </div>
         );
     }

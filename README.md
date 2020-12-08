@@ -56,6 +56,7 @@ The website will then open in your browser and you are free to make changes :) M
       TESTING
       Add extra routing for images ?
       Images for replies
+    Lazy Loading of images!
     Mini-votes:
         gold -> gold/brown, sparkle -> white/purple, clover -> green/black, fire -> red/orange, melon ->pink/green
           Threads and replies are able to be voted on.
@@ -63,6 +64,11 @@ The website will then open in your browser and you are free to make changes :) M
           Five different types of votes, each with a color
           This is more for fun
       Add an icon!
+    Second floating reply box
+    Implement Reply Peek 
+      And markdown styling of replies and posts!
+    Style 404
+      Other error messages ?
 
     Future:
       Linking between threads make easy

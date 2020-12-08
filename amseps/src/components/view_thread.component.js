@@ -106,10 +106,27 @@ export default class ViewThread extends Component{
                                 this.state.replies.map((reply, index) => 
                                     <li 
                                     key={reply._id}
-                                    className="c-border"
+                                    className="c-border c-hoverable container"
+                                    style={{marginBottom:"1vh"}}
                                     >
-                                        <b>[{reply.local_reply_number} / {reply.reply_number}]{reply.name}</b>
-                                        <b>{reply.body_text}</b>
+                                        <div className="container c-hoverable2" style={{margin:"1vh"}}>
+                                            { reply.has_image && (
+                                                <div>
+                                                    <img src={"http://localhost:5000/thread/"+this.state.thread_head._id+"/image/"+reply._id} 
+                                                    alt="Thread" className="c-border c-drop-shadow" 
+                                                    style={{maxWidth:"100%", marginTop:"1vh", marginBottom:"2vh"}}/>
+                                                </div>
+                                                )
+                                            }
+                                            <div className="c-hoverable3 width container c-subtitle" style={{borderLeft: "1px solid black", paddingLeft:"1vw"}}>
+                                                <span className="c-hoverable4" title={"Reply " + reply.local_reply_number + " of " + reply.reply_number + " replies"}>[{reply.local_reply_number} / {reply.reply_number}]</span>
+                                                <span style={{marginLeft:"1vw"}} className="c-hoverable4" title={"Poster Name: " + reply.name}>[{reply.name}]</span>
+                                                <span style={{marginLeft:"1vw"}} className="c-hoverable4" title={"Posted On: " + Date(reply.createdAt)}>[{Util.timeSince(reply.createdAt)} ago]</span>
+                                            </div>
+                                            <div style={{borderLeft: "1px solid black", marginTop:"1vh", paddingLeft:"1vw"}} className="c-hoverable3">
+                                                {reply.body_text}
+                                            </div>
+                                        </div>
                                     </li>
                                 )
                             }
