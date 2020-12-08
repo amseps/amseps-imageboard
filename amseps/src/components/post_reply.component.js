@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import axios from 'axios';
-import Resizer from 'react-image-file-resizer';
+
+import imageCompression from 'browser-image-compression';
 
 import noimage from './../common_images/noimage.png';
+
 
 export default class PostReply extends Component{
 
@@ -40,6 +42,7 @@ export default class PostReply extends Component{
             name: e.target.value
         });
     }
+
     submitReply(e){
         e.preventDefault();
         console.log("Submitting Reply");
@@ -50,27 +53,24 @@ export default class PostReply extends Component{
         if(this.state.reply_image) formData.append('reply_image', this.state.reply_image);
         const config = {     
             headers: { 'content-type': 'multipart/form-data',  "enctype":"multipart/form-data"}
-        }
+        }     
         const f = this.state.reply_image;
-        Resizer.imageFileResizer(
-            f,
-            f.width,
-            f.height,
-            f.mimetype,
-            1, //quality
-            0, //rotation
-            uri => {
-                formData.append('reply_image_thumb', this.state.reply_image); //uri
-                axios.post("http://localhost:5000/thread/" + this.props.parentId + "/post_reply", formData, config)
-                .then(res =>{
-                    console.log("Reply posted succesfully: ");
-                    console.log(res.data);
-                })
-                .catch(e => {
-                    console.log("Post Reply Error: " + e);
-                })
-            }
-        );
+        imageCompression(f,
+            {maxSizeMB: .1, maxWidthOrHeight:150}
+        ).then(t =>{
+            const file_t = new File([t], f.name, {type:f.type});
+            console.log(f)
+            console.log(file_t)
+            formData.append('reply_image_thumb', file_t); 
+            axios.post("http://localhost:5000/thread/" + this.props.parentId + "/post_reply", formData, config)
+            .then(res =>{
+                console.log("Reply posted succesfully: ");
+                console.log(res.data);
+            })
+            .catch(e => {
+                console.log("Post Reply Error: " + e);
+            })
+        })
     }
 
     onDrop(thread_image) {

@@ -1,7 +1,10 @@
+import Resizer from 'react-image-file-resizer';
 const createReactClass = require('create-react-class');
 
 const Util = createReactClass({
   statics: {
+
+
 
     hello: function() {
       return "Hello World";
@@ -21,6 +24,9 @@ const Util = createReactClass({
         if (interval > 1) {return (Math.floor(interval) + ((Math.floor(interval)===1)? " minute" : " minutes"));}
         return (Math.floor(seconds) + ((Math.floor(interval)===1)? " second" : " seconds"));
       },
+
+
+
   },
   render() {
       return ("");

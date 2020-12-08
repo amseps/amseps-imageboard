@@ -25,22 +25,14 @@ const fileFilter = (req, file, cb) => {
 const DIR = './images';
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, DIR);
+        if(file.fieldname === 'thread_image'){
+            cb(null, DIR);
+        }else{ // (if is thumbnail)
+            cb(null, (DIR+"/thumb"))
+        }
     },
     filename: (req, file, cb) => {
-        console.log("Recieved File: ");
-        console.log(file)
-        const fileName = file.originalname.toLowerCase().split(' ').join('-');
-        cb(null, Date.now() + '_' + fileName)
-    }
-});
-const DIR_THUMB = './images/thumb'
-const storage_thumb = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, DIR_THUMB);
-    },
-    filename: (req, file, cb) => {
-        console.log("Recieved File: ");
+        console.log("Recieved File (thread): ");
         console.log(file)
         const fileName = file.originalname.toLowerCase().split(' ').join('-');
         cb(null, Date.now() + '_' + fileName)
@@ -50,22 +42,14 @@ const storage_thumb = multer.diskStorage({
 const DIR_REPLIES = './images/images_replies';
 const storage_replies = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, DIR_REPLIES);
+        if(file.fieldname === 'reply_image'){
+            cb(null, DIR_REPLIES);
+        }else{ // is thumbnail
+            cb(null, DIR_REPLIES+"/thumb");
+        }
     },
     filename: (req, file, cb) => {
-        console.log("Recieved File: ");
-        console.log(file)
-        const fileName = file.originalname.toLowerCase().split(' ').join('-');
-        cb(null, Date.now() + '_' + fileName)
-    }
-});
-const DIR_REPLIES_THUMB = './images/images_replies/thumb';
-const storage_replies_thumb = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, DIR_REPLIES_THUMB);
-    },
-    filename: (req, file, cb) => {
-        console.log("Recieved File: ");
+        console.log("Recieved File (reply): ");
         console.log(file)
         const fileName = file.originalname.toLowerCase().split(' ').join('-');
         cb(null, Date.now() + '_' + fileName)
@@ -74,9 +58,7 @@ const storage_replies_thumb = multer.diskStorage({
 
 
 const upload = multer({storage: storage, fileFilter: fileFilter});
-const upload_thumb = multer({storage: storage_thumb, fileFilter: fileFilter})
 const upload_replies = multer({storage: storage_replies, fileFilter: fileFilter});
-const upload_replies_thumb = multer({storage: storage_replies_thumb, fileFilter: fileFilter});
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -124,6 +106,7 @@ router.get("/:id/image/:reply", (req, res) => {
 });
 
 router.post('/post_thread', upload.single('thread_image'),(req, res, next) => { // if POST <host>/thread/post_thread
+    post
     try {// if image succeeded ...
         World.findOne()
         .then(theworld => {
@@ -195,9 +178,14 @@ router.route('/:id/replies').get((req, res) => {
     })
 });
 
-router.post('/:id/post_reply',  upload_replies.single('reply_image'),(req, res, next) => {
+router.post('/:id/post_reply', 
+upload_replies.fields([
+    {name:'reply_image', maxCount:1},
+    {name:'reply_image_thumb', maxCount:1}
+]),
+ (req, res, next) => {
+    console.log("Cool New Reply");
     try{
-        console.log("Cool New Reply");
         Thread.findOne({_id: req.params.id})
         .then(up_par_thread => {
             Thread.findOneAndUpdate({_id: req.params.id}, {number_of_replies: up_par_thread.number_of_replies+1}, {new: true, useFindAndModify: false})
@@ -206,10 +194,12 @@ router.post('/:id/post_reply',  upload_replies.single('reply_image'),(req, res, 
                 .then(par_this_world =>{
                     World.findOneAndUpdate({}, {reply_number: par_this_world.reply_number+1}, {useFindAndModify: false, new: true})
                     .then(this_world => {
+                        const hasimage = (req.files['reply_image'][0])? true : false;
+                        const f = (hasimage)? req.files['reply_image'][0] : null;
+                        console.log(req);
                         const postname = (req.body.name) ? req.body.name : "anon";
                         const replyNum = this_world.reply_number;
                         const url = req.protocol + '://' + req.get('host');
-                        const hasimage = (req.file)? true : false;
                         const ReplyData={
                             body_text: req.body.body_text,
                             name: postname,
@@ -217,9 +207,9 @@ router.post('/:id/post_reply',  upload_replies.single('reply_image'),(req, res, 
                             local_reply_number: par_thread.number_of_replies, // all we had to get :(
                             reply_number: this_world.reply_number, // and this :(
                             post_date: new Date(),
-                            reply_image: (hasimage)? (url + "/" + par_thread._id + '/images/reply_images/' + req.file.filename) : "",
-                            reply_image_type: (hasimage) ? req.file.mimetype : "", // this seems inefficient
-                            reply_image_filename: (hasimage) ? req.file.filename : "",
+                            reply_image: url + "/" + par_thread._id + '/images/reply_images/' + f.filename,
+                            reply_image_type: (hasimage)? f.mimetype : null,
+                            reply_image_filename: (hasimage)? f.filename : null,
                             has_image: hasimage,
                             reply_votes: {
                                 red: 0,
@@ -250,7 +240,7 @@ router.post('/:id/post_reply',  upload_replies.single('reply_image'),(req, res, 
             console.log("Can't find my parent");
         });
     }catch(err){
-        console.log(err);
+        console.log("error in posting replyL " + err);
     }
 });
 
