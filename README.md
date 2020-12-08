@@ -48,6 +48,11 @@ The website will then open in your browser and you are free to make changes :) M
       make catalog grid instead of list :)
         make it a dynamic list also
     FIX THE STYLING O M G
+          Make it look nicer
+        Cleaning up bootstrap
+        Custom shits 
+        Just cleanup dogge
+        That shit look like the mf apple store
 
   	#TODO:
 
@@ -72,20 +77,37 @@ The website will then open in your browser and you are free to make changes :) M
 
     Future:
       Linking between threads make easy
-      Notes:
+      Settings in top right
+      Inlcude more usability
+        alt and title tags for everything
+      Small icons for input fields and general things
+      Implement Notes:
         Notes are brief messages you can leave that will directly tail a post
           No images allowed, like 128 characters max
             These notes will feature in a scrollable list at the end of that thread or reply header
         Notes on anything
           Notes only have one vote option , red circle
-      Little threads functions
+      Implement Little threads functions
         Like cool clicks on fings idk loll
-      When replied
+      When replied to
         Able to peek at what the thread they are replying to is
           Meaning: on hover show the post, AND show a small note afterwards of what the post says 
             IE: ">>>134590 [OP here does anyone else think that....]"
       Add styling to headerbar
         Like on hover AMSEPS change color
+        Come up with a better name?
+      Global Inspection of threads
+        Such as "featured post" that has a lot of views or votes
+      Implement amount of times a thread has been viewed!
+      IP accounts
+        Keeps info such as:
+          Amount of votes a poster has recieved
+          Amout of views a poster has recieved?
+          other small metrics
+        Show my currently posted threads
+      Smooth transitions
+        When you refresh it smoothly includes new threads, shuffles order, and removes old ones
+        Smooth introduction of new replies
       Admin controls
         Delete Threads
         Edit threads
@@ -105,24 +127,24 @@ The website will then open in your browser and you are free to make changes :) M
         Or a thread for replies?
         Or maybe both at tha same time
       Variable title?
+        meaning that the title in the browser tab is variable
         Based on how many 'notifications' are in current thread
+        Like:
+          (5) Threadname
       Loading circles , various loading states
       Need thumbnails for images
+        IMPORTANT
       Rewrite Error log for backend,
         Also make it return more proper jsons from response
       Reload page on upload
         (or just add new reply to the state)
+        Also reload on reply
       Add a better 'refresh' button than just refreshing page
       Have Badges turn red when there is a new recent post from catalog
       Archiving old threads? How will it work
         Just have a field like archived: true
         xd
         or date of archival
-      Make it look nicer
-        Cleaning up bootstrap
-        Custom shits 
-        Just cleanup dogge
-        That shit look like the mf apple store
       Get some handsome graphicks
         Ness
         Soure
@@ -131,7 +153,9 @@ The website will then open in your browser and you are free to make changes :) M
         Make that shit SEXY 
           THINK
       Server automatically archives old content
+      Show amount of people currently viewing thread
       Make static pages
+        IMPORTANT
         Homepage ?: maybe some dynamic lelements on that page
         Rules page
         Meme pages :)
