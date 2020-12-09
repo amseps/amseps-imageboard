@@ -68,6 +68,12 @@ const replySchema = new Schema({
         unique: false,
         trim: true
     },
+    reply_thumb_filename:{ // sometimes thumbnail is slightly different name bc of Date.now();
+        type: String,
+        required: false,
+        unique: false,
+        trim: false,
+    },
     reply_votes:{ //contains individual votes
         red: Number, 
         sparkle: Number,

@@ -53,15 +53,14 @@ The website will then open in your browser and you are free to make changes :) M
         Custom shits 
         Just cleanup dogge
         That shit look like the mf apple store
+    Images for replies
+      Lazy Loading of images!
+      
 
   	#TODO:
 
     Actionable:
-      Finish styling of replies
-      TESTING
-      Add extra routing for images ?
-      Images for replies
-    Lazy Loading of images!
+    TESTING NONONONONONONO
     Mini-votes:
         gold -> gold/brown, sparkle -> white/purple, clover -> green/black, fire -> red/orange, melon ->pink/green
           Threads and replies are able to be voted on.
@@ -126,7 +125,7 @@ The website will then open in your browser and you are free to make changes :) M
         Searching a catalog for individual threads
         Or a thread for replies?
         Or maybe both at tha same time
-      Variable title?
+      Variable title? in the tab
         meaning that the title in the browser tab is variable
         Based on how many 'notifications' are in current thread
         Like:

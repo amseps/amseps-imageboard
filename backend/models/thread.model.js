@@ -60,6 +60,12 @@ const threadSchema = new Schema({
         unique: false,
         trim: true
     },
+    thread_thumb_filename:{ // we need this because sometimes the names of the thumbnail are *slightly* different than the original
+        type:String,
+        required: false,
+        unique: false,
+        trim: true,
+    },
     thread_votes:{ //contains individual votes
         red: Number, 
         sparkle: Number,

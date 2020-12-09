@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-import Resizer from 'react-image-file-resizer';
+
+import imageCompression from 'browser-image-compression';
 
 export default class PostThread extends Component{
 
@@ -81,33 +82,25 @@ export default class PostThread extends Component{
         formData.append('body_text', this.state.body_text);
         formData.append('name', this.state.name);
         formData.append('thread_title', this.state.title)
-        const config = {     
-            headers: { 'content-type': 'multipart/form-data',  "enctype":"multipart/form-data"}
-        }
 
         const f = this.state.thread_image;
-        Resizer.imageFileResizer(
-            f,
-            f.width,
-            f.height,
-            f.mimetype,
-            1, //quality
-            0, //rotation
-            uri => {
-                formData.append('thread_image_thumb', uri);
-                axios.post('http://localhost:5000/thread/post_thread', formData, config)
-                .then(res =>{
-                    console.log("Thread posted succesfully: ");
-                    console.log(res.data);
-                })
-                .catch(e => {
-                    console.log("Post Thread Error: " + e);
-                })
+        imageCompression(f,
+            {maxSizeMB:.25, maxWidthOrHeight:500}
+        ).then( t=>{
+            const file_t = new File([t], f.name, {type:f.type, date:f.date});
+            formData.append('thread_image_thumb', file_t);
+            const config = {     
+                headers: { 'content-type': 'multipart/form-data',  "enctype":"multipart/form-data"}
             }
-        );
-
-
-
+            axios.post('http://localhost:5000/thread/post_thread', formData, config)
+            .then(res =>{
+                console.log("Thread posted succesfully: ");
+                console.log(res.data);
+            })
+            .catch(e => {
+                console.log("Post Thread Error: " + e);
+            })
+        })
     }
 
     onDrop(thread_image) {

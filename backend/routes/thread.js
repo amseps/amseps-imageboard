@@ -43,6 +43,7 @@ const DIR_REPLIES = './images/images_replies';
 const storage_replies = multer.diskStorage({
     destination: (req, file, cb) => {
         if(file.fieldname === 'reply_image'){
+            firstdate_replies = Date.now();
             cb(null, DIR_REPLIES);
         }else{ // is thumbnail
             cb(null, DIR_REPLIES+"/thumb");
@@ -62,15 +63,30 @@ const upload_replies = multer({storage: storage_replies, fileFilter: fileFilter}
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
+router.get("/:id/image/thumb", (req, res) => {
+    console.log("Want Thread Image");
+    Thread.findById(req.params.id)
+    .then((thread, err) => {
+        if(thread){
+            res.set("Content-Type", thread.thread_image_type);
+            res.send(fs.readFileSync("./images/thumb/" + thread.thread_thumb_filename));
+        }else{
+            console.log("Couldn't find the image");
+            res.set("Content-Type", "image/png");
+            res.send(fs.readFileSync("./images/common_images/noimage.png"));
+        }
+    }).catch(err =>{
+        console.log("Couldn't find the image err: " + err);
+        res.set("Content-Type", "image/png");
+        res.send(fs.readFileSync("./images/common_images/noimage.png"));
+    })
+});
 router.get("/:id/image", (req, res) => {
     console.log("Want Thread Image");
     Thread.findById(req.params.id)
     .then((thread, err) => {
         if(thread){
-            console.log(thread);
             res.set("Content-Type", thread.thread_image_type);
-            console.log(thread.thread_image);
-            //console.log(res);
             res.send(fs.readFileSync("./images/" + thread.thread_image_filename));
         }else{
             console.log("Couldn't find the image");
@@ -104,13 +120,39 @@ router.get("/:id/image/:reply", (req, res) => {
         res.send(fs.readFileSync("./images/common_images/noimage.png"));
     })
 });
+router.get("/:id/image/:reply/thumb", (req, res) => {
+    console.log("Want Reply Image");
+    Reply.findById(req.params.reply)
+    .then((reply, err) => {
+        if(reply){
+            console.log(reply);
+            res.set("Content-Type", reply.reply_image_type);
+            console.log(reply.reply_image);
+            res.send(fs.readFileSync("./images/images_replies/thumb/" + reply.reply_thumb_filename));
+        }else{
+            console.log("Couldn't find the image");
+            res.set("Content-Type", "image/png");
+            res.send(fs.readFileSync("./images/common_images/noimage.png"));
+        }
+    }).catch(err =>{
+        console.log("Couldn't find the image err: " + err);
+        res.set("Content-Type", "image/png");
+        res.send(fs.readFileSync("./images/common_images/noimage.png"));
+    })
+});
 
-router.post('/post_thread', upload.single('thread_image'),(req, res, next) => { // if POST <host>/thread/post_thread
-    post
+router.post('/post_thread', 
+upload.fields([
+    {name:'thread_image', max_count:1},
+    {name:'thread_image_thumb', max_count:1}
+]),
+(req, res, next) => { // if POST <host>/thread/post_thread
     try {// if image succeeded ...
         World.findOne()
         .then(theworld => {
             World.findOneAndUpdate({},{thread_number: theworld.thread_number+1}, {new:true, useFindAndModify: false}, (err, doc) => {
+                const hasimage = (req.files['thread_image'][0])? true : false;
+                const f = (hasimage)? req.files['thread_image'][0] : null;
                 const threadNum = doc.thread_number;
                 const url = req.protocol + '://' + req.get('host');
                 const postername = (req.body.name) ? req.body.name : "anon";
@@ -119,9 +161,10 @@ router.post('/post_thread', upload.single('thread_image'),(req, res, next) => { 
                     body_text: req.body.body_text,
                     thread_title: req.body.thread_title,
                     name: postername,
-                    thread_image: url + '/images/' + req.file.filename,
-                    thread_image_type: req.file.mimetype,
-                    thread_image_filename: req.file.filename,
+                    thread_image: (hasimage)? (url + '/images/' + f.filename) : null,
+                    thread_image_type: (hasimage)? f.mimetype : null,
+                    thread_image_filename: (hasimage)? f.filename : null,
+                    thread_thumb_filename: (hasimage)? req.files['thread_image_thumb'][0].filename : null,
                     //autogenned vvvv
                     thread_number: threadNum, // that we just found
                     post_date: new Date(),
@@ -194,7 +237,7 @@ upload_replies.fields([
                 .then(par_this_world =>{
                     World.findOneAndUpdate({}, {reply_number: par_this_world.reply_number+1}, {useFindAndModify: false, new: true})
                     .then(this_world => {
-                        const hasimage = (req.files['reply_image'][0])? true : false;
+                        const hasimage = (req.files['reply_image'])? true : false;
                         const f = (hasimage)? req.files['reply_image'][0] : null;
                         console.log(req);
                         const postname = (req.body.name) ? req.body.name : "anon";
@@ -207,9 +250,10 @@ upload_replies.fields([
                             local_reply_number: par_thread.number_of_replies, // all we had to get :(
                             reply_number: this_world.reply_number, // and this :(
                             post_date: new Date(),
-                            reply_image: url + "/" + par_thread._id + '/images/reply_images/' + f.filename,
+                            reply_image: (hasimage)?url + "/" + par_thread._id + '/images/reply_images/' + f.filename : null,
                             reply_image_type: (hasimage)? f.mimetype : null,
                             reply_image_filename: (hasimage)? f.filename : null,
+                            reply_thumb_filename: (hasimage)? req.files['reply_image_thumb'][0].filename : null,
                             has_image: hasimage,
                             reply_votes: {
                                 red: 0,

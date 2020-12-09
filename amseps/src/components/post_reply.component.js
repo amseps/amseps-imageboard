@@ -50,18 +50,27 @@ export default class PostReply extends Component{
         formData.append('body_text', this.state.body_text);
         formData.append('name', this.state.name);
         formData.append('thread_title', this.state.title)
-        if(this.state.reply_image) formData.append('reply_image', this.state.reply_image);
         const config = {     
             headers: { 'content-type': 'multipart/form-data',  "enctype":"multipart/form-data"}
-        }     
-        const f = this.state.reply_image;
-        imageCompression(f,
-            {maxSizeMB: .1, maxWidthOrHeight:150}
-        ).then(t =>{
-            const file_t = new File([t], f.name, {type:f.type});
-            console.log(f)
-            console.log(file_t)
-            formData.append('reply_image_thumb', file_t); 
+        }
+        if(this.state.reply_image){ // if we have an image
+            formData.append('reply_image', this.state.reply_image);
+            const f = this.state.reply_image;
+            imageCompression(f,
+                {maxSizeMB: .1, maxWidthOrHeight:150}
+            ).then(t =>{
+                const file_t = new File([t], f.name, {type:f.type});
+                formData.append('reply_image_thumb', file_t); 
+                axios.post("http://localhost:5000/thread/" + this.props.parentId + "/post_reply", formData, config)
+                .then(res =>{
+                    console.log("Reply posted succesfully: ");
+                    console.log(res.data);
+                })
+                .catch(e => {
+                    console.log("Post Reply Error: " + e);
+                })
+            })
+        }else{ // if no image
             axios.post("http://localhost:5000/thread/" + this.props.parentId + "/post_reply", formData, config)
             .then(res =>{
                 console.log("Reply posted succesfully: ");
@@ -70,7 +79,7 @@ export default class PostReply extends Component{
             .catch(e => {
                 console.log("Post Reply Error: " + e);
             })
-        })
+        }
     }
 
     onDrop(thread_image) {
