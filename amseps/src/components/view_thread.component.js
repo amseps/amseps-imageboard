@@ -3,6 +3,7 @@ import axios from 'axios';
 import {Link} from "react-router-dom";
 import Util from './../utility';
 import LazyImage from './lazyimage.component';
+import Draggable from 'react-draggable'; // The default
 
 import PostReply from './post_reply.component';
 
@@ -101,7 +102,14 @@ export default class ViewThread extends Component{
                         {   !this.state.error_message && //IF Don't display error message
                             <div className="container">
                                 <div className="c-border c-hoverable" style={{padding:"2vw"}}>
-                                    <img src={"http://localhost:5000/thread/"+this.state.thread_head._id+"/image"} alt="Thread" className="c-border c-drop-shadow" style={{maxWidth:"100%"}}/>
+                                    <Draggable handle="strong">
+                                        <div style={{display:"inline-block"}}> 
+                                            <strong className="cursor" style={{cursor:"move", backgroundColor:"white", width:"4vw"}}>
+                                                ■
+                                            </strong>
+                                            <img src={"http://localhost:5000/thread/"+this.state.thread_head._id+"/image"} alt="Thread" className="c-border c-drop-shadow" style={{maxWidth:"100%"}}/>
+                                        </div>
+                                    </Draggable>
                                     <div className="c-border-sides c-hoverable2">
                                         <h1 className="c-hoverable3 width container" style={{marginTop:"1vh"}}> {this.state.thread_head.thread_title}</h1>
                                         <p className="c-hoverable3 width container c-subtitle">

@@ -127,3 +127,8 @@
 .c-hoverable4:hover{
     background-color: #C5C5C5;
 }
+
+.c-resizable{
+    overflow: auto;
+    resize: both;
+}

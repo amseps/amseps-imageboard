@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import axios from 'axios';
 
-import imageCompression from 'browser-image-compression';
+import imageCompression from 'browser-image-compression'
 
 import noimage from './../common_images/noimage.png';
 
@@ -26,6 +26,9 @@ export default class PostReply extends Component{
             reply_image: "",
             reply_image_preview: "",
             counter_classname: "c-border-light",
+
+            m_target: null,
+            m_container: null,
         };
     }
 
@@ -112,43 +115,45 @@ export default class PostReply extends Component{
 
     render(){
         return(
-            <div className="container">
+            <div>
                 <div className="container">
-                    <h6>Post New Reply</h6>
-                    <form onSubmit={this.submitReply}>
-                        <div className="form-group c-no-vert-margins">
-                            <input type="text"
-                            placeholder="name"
-                            className="form-control"
-                            value={this.state.name}
-                            onChange={this.changeName}
-                            />
-                        </div>
-                        <div className="form-group c-no-vert-margins">
-                            <textArea
-                            placeholder="body"
-                            required className="form-control d-flex c-body-input mb-auto p-2"
-                            value={this.state.body_text}
-                            onChange={this.changeBodyText}
-                            style={{minHeight: '70px'}}
-                            />
-                        </div>
-                        <div style={{marginTop:'-2.5%', marginLeft:'1%', backgroundColor:"#ffffff", maxWidth:"5vw", paddingLeft:".3vw", backgroundColor:'white'}} className={this.state.counter_classname}>
-                                [{this.state.body_text.length}/1024]
-                        </div>
-                        <div className="form-group c-no-vert-margins">
-                            <input type="file" 
-                            accept="image/*"
-                            className="form-control"
-                            onChange={this.changeImage}
-                            style={{marginTop:'1%'}}
-                            />
-                            <img style={{maxHeight:'30vh', maxWidth:'100%', marginTop:'3%', marginBottom:'3%'}} src={this.state.reply_image_preview} />
-                        </div>
-                        <div className="form-group c-no-vert-margins">
-                            <input type="submit" value="Post Reply" className="btn btn-primary" />
-                        </div>
-                    </form>
+                    <div className="container">
+                        <h6>Post New Reply</h6>
+                        <form onSubmit={this.submitReply}>
+                            <div className="form-group c-no-vert-margins">
+                                <input type="text"
+                                placeholder="name"
+                                className="form-control"
+                                value={this.state.name}
+                                onChange={this.changeName}
+                                />
+                            </div>
+                            <div className="form-group c-no-vert-margins">
+                                <textArea
+                                placeholder="body"
+                                required className="form-control d-flex c-body-input mb-auto p-2"
+                                value={this.state.body_text}
+                                onChange={this.changeBodyText}
+                                style={{minHeight: '70px'}}
+                                />
+                            </div>
+                            <div style={{marginTop:'-2.5%', marginLeft:'1%', backgroundColor:"#ffffff", maxWidth:"5vw", paddingLeft:".3vw", backgroundColor:'white'}} className={this.state.counter_classname}>
+                                    [{this.state.body_text.length}/1024]
+                            </div>
+                            <div className="form-group c-no-vert-margins">
+                                <input type="file" 
+                                accept="image/*"
+                                className="form-control"
+                                onChange={this.changeImage}
+                                style={{marginTop:'1%'}}
+                                />
+                                <img style={{maxHeight:'30vh', maxWidth:'100%', marginTop:'3%', marginBottom:'3%'}} src={this.state.reply_image_preview} />
+                            </div>
+                            <div className="form-group c-no-vert-margins">
+                                <input type="submit" value="Post Reply" className="btn btn-primary" />
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         );
