@@ -55,12 +55,16 @@ The website will then open in your browser and you are free to make changes :) M
         That shit look like the mf apple store
     Images for replies
       Lazy Loading of images!
+      thumbnails for images
+    Error messages for post failures
+    Loading circles , various loading states
+      
       
 
   	#TODO:
 
-    Actionable:
-    TESTING NONONONONONONO
+    Actionable: //////////////////////////////////////////////////////////////////////////////////
+    Testing?
     Mini-votes:
         gold -> gold/brown, sparkle -> white/purple, clover -> green/black, fire -> red/orange, melon ->pink/green
           Threads and replies are able to be voted on.
@@ -71,14 +75,17 @@ The website will then open in your browser and you are free to make changes :) M
     Second floating reply box
     Implement Reply Peek 
       And markdown styling of replies and posts!
-    Style 404
-      Other error messages ?
+    Reload page on upload
+      or just add new reply to the state)
+      Also reload on reply
+    Add a better 'refresh' button than just refreshing page
 
-    Future:
-      Linking between threads make easy
-      Settings in top right
-      Inlcude more usability
-        alt and title tags for everything
+    Minimum Viable Product: ////////////////////////////////////////////////////////////////////
+      Make static pages
+        IMPORTANT
+        Homepage ?: maybe some dynamic lelements on that page
+        Rules page
+        Meme pages :)
       Small icons for input fields and general things
       Implement Notes:
         Notes are brief messages you can leave that will directly tail a post
@@ -86,27 +93,12 @@ The website will then open in your browser and you are free to make changes :) M
             These notes will feature in a scrollable list at the end of that thread or reply header
         Notes on anything
           Notes only have one vote option , red circle
-      Implement Little threads functions
-        Like cool clicks on fings idk loll
-      When replied to
-        Able to peek at what the thread they are replying to is
-          Meaning: on hover show the post, AND show a small note afterwards of what the post says 
-            IE: ">>>134590 [OP here does anyone else think that....]"
+      Implement Little threads functions (ignore this user, hide reply etc)
       Add styling to headerbar
         Like on hover AMSEPS change color
         Come up with a better name?
-      Global Inspection of threads
-        Such as "featured post" that has a lot of views or votes
-      Implement amount of times a thread has been viewed!
-      IP accounts
-        Keeps info such as:
-          Amount of votes a poster has recieved
-          Amout of views a poster has recieved?
-          other small metrics
-        Show my currently posted threads
-      Smooth transitions
-        When you refresh it smoothly includes new threads, shuffles order, and removes old ones
-        Smooth introduction of new replies
+      Style 404
+        Other error messages ?
       Admin controls
         Delete Threads
         Edit threads
@@ -119,48 +111,47 @@ The website will then open in your browser and you are free to make changes :) M
         Using Captchas for posts https://www.npmjs.com/package/react-google-recaptcha
           https://www.npmjs.com/package/react-google-recaptcha-v3 
         Better stability in recieving posts
-        Error messages for post failures
         Better clientside controls to help the user post the correct things
-      Search
-        Searching a catalog for individual threads
-        Or a thread for replies?
-        Or maybe both at tha same time
-      Variable title? in the tab
-        meaning that the title in the browser tab is variable
-        Based on how many 'notifications' are in current thread
-        Like:
-          (5) Threadname
-      Loading circles , various loading states
-      Need thumbnails for images
-        IMPORTANT
-      Rewrite Error log for backend,
+      Rewrite Error log for backend, (and frontend :))
         Also make it return more proper jsons from response
-      Reload page on upload
-        (or just add new reply to the state)
-        Also reload on reply
-      Add a better 'refresh' button than just refreshing page
-      Have Badges turn red when there is a new recent post from catalog
       Archiving old threads? How will it work
         Just have a field like archived: true
-        xd
-        or date of archival
+        Server automatically archives old content , date of archival
       Get some handsome graphicks
         Ness
         Soure
         Photoshoppe
-      Other individualizations
-        Make that shit SEXY 
-          THINK
-      Server automatically archives old content
-      Show amount of people currently viewing thread
-      Make static pages
-        IMPORTANT
-        Homepage ?: maybe some dynamic lelements on that page
-        Rules page
-        Meme pages :)
       Post it on tha mf innernet
 
-    #STRETCH GOALS:
+    Other Goals: //////////////////////////////////////////////////////////////////////////////////
+      Show amount of people currently viewing thread
+      Have Badges turn red when there is a new recent post from catalog
+      Variable title? in the tab
+        meaning that the title in the browser tab is variable
+        Based on how many 'notifications' are in current thread
+          Like:
+            (5) Threadname
+      Search
+        Searching a catalog for individual threads
+        Or a thread for replies?
+        Or maybe both at tha same time
+    Smooth transitions
+        When you refresh it smoothly includes new threads, shuffles order, and removes old ones
+        Smooth introduction of new replies
+    Linking between threads make easy
+    Settings in top right
+    Inlcude more usability
+      alt and title tags for everything
+    Dark Mode!
+    Global Inspection of threads
+      Such as "featured post" that has a lot of views or votes
+    Implement amount of times a thread has been viewed!
+    IP accounts
+      Amount of votes a poster has recieved
+      Amout of views a poster has recieved?
+      Show my currently posted threads
+
+    #STRETCH GOALS: //////////////////////////////////////////////////////////////////////////////////
       EPIC Chat Feature
       Separate boards ?
       ADVERTISE SHITTE
