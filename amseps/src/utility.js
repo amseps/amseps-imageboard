@@ -1,4 +1,3 @@
-import Resizer from 'react-image-file-resizer';
 const createReactClass = require('create-react-class');
 
 const Util = createReactClass({

@@ -18,6 +18,8 @@ export default class Catalog extends Component{
         this.state = {
             threads: [],
             threads_loaded: false,
+            load_failed: false,
+            load_failed_message: "",
         };
     }
 
@@ -37,6 +39,13 @@ export default class Catalog extends Component{
                 threads: (res.data).sort((a,b) => a.updatedAt < b.updatedAt ? 1 : -1), //inserts into state and sorts
                 threads_loaded: true,
             });
+        }).catch(err => {
+            console.log("Failed to load threads: " + err)
+            this.setState({
+                load_failed: true,
+                threads_loaded: true,
+                load_failed_message: ("Failed to load threads: " + err)
+            })
         });
     }
 
@@ -46,9 +55,9 @@ export default class Catalog extends Component{
                 <PostThread props={this.state.threads} />
                 Catalog
                 Numthreads: {this.state.threads.length}
-                <div className="container-fluid">
+                <div className="container-fluid" style={{minHeight:"100vh"}}>
                     <ul className="d-flex flex-wrap justify-content-md-around align-content-stretch align-items-center">
-                        {   (this.state.threads_loaded)?
+                        {this.state.threads_loaded &&
                             (   //threads have loaded
                                 this.state.threads.map((thread) => (
                                     <div style={{marginBottom: '1.5%'}} key={thread._id}>
@@ -78,10 +87,20 @@ export default class Catalog extends Component{
                                     </div>
                                 ))
                             )
-                            :
+                        }
+                        {!this.state.threads_loaded &&
                             (   //threads not loaded yet
                                 <div class="spinner-border" role="status">
                                     <span class="sr-only">Loading...</span>
+                                </div>
+                            )
+                        }
+                        {this.state.load_failed && 
+                            (
+                                <div className="center">
+                                    Failed to load threads <br/>
+                                    {this.state.load_failed_message} <br/>
+                                    Refresh the page!
                                 </div>
                             )
                         }
