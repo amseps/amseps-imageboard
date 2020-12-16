@@ -9,6 +9,8 @@ import PostReply from './post_reply.component';
 
 import noimage from './../common_images/noimage.png';
 
+var parse_html = require('html-react-parser');
+
 export default class ViewThread extends Component{
 
     constructor(props){
@@ -19,6 +21,7 @@ export default class ViewThread extends Component{
         this.refreshPage = this.refreshPage.bind(this);
         this.onDrop = this.onDrop.bind(this);
         this.toggleThumb = this.toggleThumb.bind(this);
+        this.markup = this.markup.bind(this);
 
         this.state = {
             thread_head: {},
@@ -79,6 +82,50 @@ export default class ViewThread extends Component{
         this.setState({
             pictures: this.state.pictures.concat(picture),
         });
+    }
+
+    markup(text){
+        // we use 'class' here instead of 'className' because of the library we are using
+        // this is overall a dumb implementation
+        //opens
+        const quote_o = "<span class=\"m-quote\">";
+        const superquote_o = "<span class=\"m-superquote\">";
+        const spoiler_o = "<span class=\"m-spoiler\">";
+        const quoted_o = "<span class=\"m-quoted\">"
+        const outerquoted_o = "<span class=\"m-outer-quoted\">";
+        const subtitle_o = "<span class=\"c-subtitle\">";
+        const reply_o3 = ">";
+
+        //closes
+        const span_c = "</span>";
+
+
+
+        let toret = "";
+        let lines = text.split('\n');
+        for(let i = 0; i < lines.length; i++){
+            if(lines[i][0] === ">"){ // >quote
+                if(lines[i][1] === ">"){ // >>reply
+                    if(lines[i][2] === ">"){ // >>>superquote
+                        lines[i] = superquote_o + lines[i] + span_c;
+                    }else{// >>reply
+                        this.state.replies.map(reply =>{
+                            if(reply.reply_number === parseInt(lines[i].substring(2))){ //the number is equal to another in the thread (entire line after >> is just a number also)
+                                lines[i] =  outerquoted_o + lines[i] + " || [" + quoted_o + subtitle_o + reply.body_text.substring(0, 20) + span_c + "..." +  span_c + "]" + span_c;
+                            }
+                        })
+                    }
+                }else{ // >quote
+                    lines[i] = quote_o + lines[i] + span_c;
+                }
+            }else{
+                //do nothing if no quote
+            }
+            toret += lines[i] + "<br>";
+        }
+        let abcde = <div className="m-quote"> hello <br/> hello2 </div>; // <-----make this func like this;
+        return abcde;
+        //return parse_html(toret);
     }
 
     toggleThumb(img){
@@ -147,7 +194,7 @@ export default class ViewThread extends Component{
                                                         <span style={{marginLeft:"1vw"}} className="c-hoverable4" title={"Posted On: " + Date(reply.createdAt)}>[{Util.timeSince(reply.createdAt)} ago]</span>
                                                     </div>
                                                     <div style={{borderLeft: "1px solid black", marginTop:"1vh", paddingLeft:"1vw"}} className="c-hoverable3">
-                                                        {reply.body_text}
+                                                        {this.markup(reply.body_text)}
                                                     </div>
                                                 </div>
                                             </li>

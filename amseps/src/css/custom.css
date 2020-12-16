@@ -132,3 +132,20 @@
     overflow: auto;
     resize: both;
 }
+
+.m-quote{
+    color: green;
+    background-color: #bbfd84
+}
+.m-superquote{
+    color: rgb(82, 28, 133);
+    background-color: rgb(249, 228, 255);
+}
+.m-quoted{
+    color: #163e46;
+    background-color: #e3f2ff;
+}
+.m-outer-quoted{
+    border: solid 1px lightslategrey;
+    background-color: #d7fdfd;
+}

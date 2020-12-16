@@ -58,6 +58,7 @@ The website will then open in your browser and you are free to make changes :) M
       thumbnails for images
     Error messages for post failures
     Loading circles , various loading states
+    Thread and reply markup
       
       
 
