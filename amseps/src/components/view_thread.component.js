@@ -19,8 +19,10 @@ export default class ViewThread extends Component{
 
         this.refreshPage = this.refreshPage.bind(this);
         this.onDrop = this.onDrop.bind(this);
-        this.toggleThumb = this.toggleThumb.bind(this);
         this.markup = this.markup.bind(this);
+        this.scrollToReply = this.scrollToReply.bind(this);
+        this.clickedReplyNumber = this.clickedReplyNumber.bind(this);
+
 
         this.state = {
             thread_head: {},
@@ -30,6 +32,8 @@ export default class ViewThread extends Component{
             thread_id: -1,
             pictures: [],
             isloading: true,
+
+            postReplyText: "",
         }
 
     }
@@ -87,8 +91,8 @@ export default class ViewThread extends Component{
         let lines = text.split('\n');
         for(let i = 0 ; i < lines.length; i++){
             if(lines[i][0] && lines[i][0] === '>'){
-                if(lines[i][1] && lines[i][1] == '>'){
-                    if(lines[i][1] && lines[i][2] == '>'){ //superquote
+                if(lines[i][1] && lines[i][1] === '>'){
+                    if(lines[i][1] && lines[i][2] === '>'){ //superquote
                         lines[i] = <span className="m-superquote">{lines[i]}</span>
                     }else{// >> doublequote
                         let replynum = parseInt(lines[i].substring(2));
@@ -122,10 +126,15 @@ export default class ViewThread extends Component{
         return (<div>{lines}</div>);
     }
 
-    toggleThumb(img){
+    scrollToReply(reply){
 
     }
- 
+
+    clickedReplyNumber(reply){
+        this.setState({
+            postReplyText: reply.reply_number
+        });
+    }
 
     render(){
         return(
@@ -184,7 +193,11 @@ export default class ViewThread extends Component{
                                                         )
                                                     }
                                                     <div className="c-hoverable3 width container c-subtitle" style={{borderLeft: "1px solid black", paddingLeft:"1vw"}}>
-                                                        <span className="c-hoverable4" title={"Reply " + reply.local_reply_number + " of " + reply.reply_number + " replies"}>[{reply.local_reply_number} / {reply.reply_number}]</span>
+                                                        <button dat={reply} onClick={() => this.clickedReplyNumber(reply)}>
+                                                            <span className="c-hoverable4" title={"Reply " + reply.local_reply_number + " of " + reply.reply_number + " replies"}>
+                                                                [{reply.local_reply_number} / {reply.reply_number}]
+                                                            </span>
+                                                        </button>
                                                         <span style={{marginLeft:"1vw"}} className="c-hoverable4" title={"Poster Name: " + reply.name}>[{reply.name}]</span>
                                                         <span style={{marginLeft:"1vw"}} className="c-hoverable4" title={"Posted On: " + Date(reply.createdAt)}>[{Util.timeSince(reply.createdAt)} ago]</span>
                                                     </div>
@@ -196,7 +209,7 @@ export default class ViewThread extends Component{
                                         )
                                     }
                                 </ul>
-                                <PostReply parentId={this.state.thread_id}/>
+                                <PostReply parentId={this.state.thread_id} suppliedText={this.state.postReplyText}/>
                             </div>
                         }
                     </div>

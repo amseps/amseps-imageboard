@@ -20,12 +20,15 @@ export default class PostReply extends Component{
         this.onDrop = this.onDrop.bind(this);
 
         this.state={
+            supplied_text: (props.suppliedText)? props.suppliedText : "" ,
             error_text: "",
             body_text: "",
             name: "",
             reply_image: "",
             reply_image_preview: "",
             counter_classname: "c-border-light",
+
+            prevSuppliedText: -1,
 
             m_target: null,
             m_container: null,
@@ -35,6 +38,17 @@ export default class PostReply extends Component{
     componentDidMount(){
 
     }
+    componentDidUpdate(){
+        if(!(this.props.suppliedText === this.state.prevSuppliedText)){
+            let newtex = this.state.body_text + this.props.suppliedText.toString(); // .. you can't mutate strings specifically for textarea? that's surreal
+            this.setState({
+                prevSuppliedText: this.props.suppliedText,
+                body_text: newtex
+            });
+
+        }
+    }
+
     changeBodyText(e){
         this.setState({
             body_text: e.target.value
@@ -45,6 +59,8 @@ export default class PostReply extends Component{
             name: e.target.value
         });
     }
+
+
 
     submitReply(e){
         e.preventDefault();
@@ -129,9 +145,11 @@ export default class PostReply extends Component{
                                 />
                             </div>
                             <div className="form-group c-no-vert-margins">
-                                <textArea
+                                <textarea
+                                type="text"
                                 placeholder="body"
-                                required className="form-control d-flex c-body-input mb-auto p-2"
+                                required 
+                                className="form-control d-flex c-body-input mb-auto p-2"
                                 value={this.state.body_text}
                                 onChange={this.changeBodyText}
                                 style={{minHeight: '70px'}}
