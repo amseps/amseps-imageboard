@@ -45,6 +45,10 @@
     margin-top: 0 !important;
 }
 
+.c-remove-styling, HashLink{
+    text-decoration: none;
+}
+
 .c-list{
     list-style: none;
 }

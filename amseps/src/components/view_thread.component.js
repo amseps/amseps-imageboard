@@ -4,12 +4,11 @@ import {Link} from "react-router-dom";
 import Util from './../utility';
 import LazyImage from './lazyimage.component';
 import Draggable from 'react-draggable'; // The default
+import { HashLink } from 'react-router-hash-link';
 
 import PostReply from './post_reply.component';
 
 import noimage from './../common_images/noimage.png';
-
-var parse_html = require('html-react-parser');
 
 export default class ViewThread extends Component{
 
@@ -85,47 +84,42 @@ export default class ViewThread extends Component{
     }
 
     markup(text){
-        // we use 'class' here instead of 'className' because of the library we are using
-        // this is overall a dumb implementation
-        //opens
-        const quote_o = "<span class=\"m-quote\">";
-        const superquote_o = "<span class=\"m-superquote\">";
-        const spoiler_o = "<span class=\"m-spoiler\">";
-        const quoted_o = "<span class=\"m-quoted\">"
-        const outerquoted_o = "<span class=\"m-outer-quoted\">";
-        const subtitle_o = "<span class=\"c-subtitle\">";
-        const reply_o3 = ">";
-
-        //closes
-        const span_c = "</span>";
-
-
-
-        let toret = "";
         let lines = text.split('\n');
-        for(let i = 0; i < lines.length; i++){
-            if(lines[i][0] === ">"){ // >quote
-                if(lines[i][1] === ">"){ // >>reply
-                    if(lines[i][2] === ">"){ // >>>superquote
-                        lines[i] = superquote_o + lines[i] + span_c;
-                    }else{// >>reply
-                        this.state.replies.map(reply =>{
-                            if(reply.reply_number === parseInt(lines[i].substring(2))){ //the number is equal to another in the thread (entire line after >> is just a number also)
-                                lines[i] =  outerquoted_o + lines[i] + " || [" + quoted_o + subtitle_o + reply.body_text.substring(0, 20) + span_c + "..." +  span_c + "]" + span_c;
-                            }
-                        })
+        for(let i = 0 ; i < lines.length; i++){
+            if(lines[i][0] && lines[i][0] === '>'){
+                if(lines[i][1] && lines[i][1] == '>'){
+                    if(lines[i][1] && lines[i][2] == '>'){ //superquote
+                        lines[i] = <span className="m-superquote">{lines[i]}</span>
+                    }else{// >> doublequote
+                        let replynum = parseInt(lines[i].substring(2));
+                        let replyingto = this.state.replies.find(reply => reply.reply_number === replynum);
+                        if(replyingto){ // if we found something it's replying to
+                            lines[i] = 
+                            <HashLink 
+                            style={{textDecoration:'none'}}
+                            smooth
+                            scroll={(el) => el.scrollIntoView({ behavior: 'smooth', block: 'center' })}
+                            to={"#rep_"+replyingto.reply_number}
+                            >
+                                {">>"}
+                                <span className="m-quoted">
+                                    <span className="m-outer-quoted">
+                                        {replynum}
+                                    </span>
+                                {"["}{replyingto.body_text.substring(0, 50)}{replyingto.body_text.length > 50 && "..."}{"]"}
+                                </span>
+                            </HashLink>
+                        }
                     }
-                }else{ // >quote
-                    lines[i] = quote_o + lines[i] + span_c;
+                }else{// > quote
+                    lines[i] = <span className="m-quote">{lines[i]}</span>
                 }
-            }else{
-                //do nothing if no quote
+            }else{//not a quote
+
             }
-            toret += lines[i] + "<br>";
+            lines[i] = <span>{lines[i]}<br/></span>
         }
-        let abcde = <div className="m-quote"> hello <br/> hello2 </div>; // <-----make this func like this;
-        return abcde;
-        //return parse_html(toret);
+        return (<div>{lines}</div>);
     }
 
     toggleThumb(img){
@@ -174,6 +168,7 @@ export default class ViewThread extends Component{
                                         this.state.replies.map((reply, index) => 
                                             <li 
                                             key={reply._id}
+                                            id={"rep_"+reply.reply_number}
                                             className="c-border c-hoverable container"
                                             style={{marginBottom:"1vh"}}
                                             >
