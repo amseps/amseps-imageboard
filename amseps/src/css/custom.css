@@ -171,3 +171,9 @@
     right:4px;
     z-index: 2;
 }
+.a-bottom-left{
+    position: fixed;
+    bottom:4px;
+    right:4px;
+    z-index: 2;
+}
