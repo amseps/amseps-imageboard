@@ -20,8 +20,8 @@ export default class ViewThread extends Component{
         this.refreshPage = this.refreshPage.bind(this);
         this.onDrop = this.onDrop.bind(this);
         this.markup = this.markup.bind(this);
-        this.scrollToReply = this.scrollToReply.bind(this);
         this.clickedReplyNumber = this.clickedReplyNumber.bind(this);
+        this.focusOnReply = this.focusOnReply.bind(this);
 
 
         this.state = {
@@ -34,6 +34,7 @@ export default class ViewThread extends Component{
             isloading: true,
 
             postReplyText: "",
+            currentlyFocusedReply: -1,
         }
 
     }
@@ -87,32 +88,44 @@ export default class ViewThread extends Component{
         });
     }
 
-    markup(text){
+    markup(text, myReplyNumber){
         let lines = text.split('\n');
         for(let i = 0 ; i < lines.length; i++){
             if(lines[i][0] && lines[i][0] === '>'){
                 if(lines[i][1] && lines[i][1] === '>'){
                     if(lines[i][1] && lines[i][2] === '>'){ //superquote
                         lines[i] = <span className="m-superquote">{lines[i]}</span>
-                    }else{// >> doublequote
+                    }else{// >> doublequote // also as it stands you are not allowed to reply to the thread itself
                         let replynum = parseInt(lines[i].substring(2));
-                        let replyingto = this.state.replies.find(reply => reply.reply_number === replynum);
+                        let replyingtoIndex = this.state.replies.findIndex(reply => reply.reply_number === replynum);
+                        let replyingto = this.state.replies[replyingtoIndex];
                         if(replyingto){ // if we found something it's replying to
                             lines[i] = 
                             <HashLink 
                             style={{textDecoration:'none'}}
                             smooth
                             scroll={(el) => el.scrollIntoView({ behavior: 'smooth', block: 'center' })}
+                            className="c-subtitle"
                             to={"#rep_"+replyingto.reply_number}
+                            onClick={(elem) => this.focusOnReply(replyingto.reply_number)}
                             >
                                 {">>"}
                                 <span className="m-quoted">
                                     <span className="m-outer-quoted">
                                         {replynum}
                                     </span>
-                                {"["}{replyingto.body_text.substring(0, 50)}{replyingto.body_text.length > 50 && "..."}{"]"}
+                                {"["}{replyingto.body_text.substring(0, 100)}{replyingto.body_text.length > 100 && "..."}{"]"}
                                 </span>
                             </HashLink>
+                            //we will also add that this is a reply to replyingto
+                            if(!replyingto.repliesToMe) replyingto.repliesToMe = [];
+                            const ind = replyingto.repliesToMe.findIndex(elem => elem === myReplyNumber);
+                            if(ind < 0){ // if there are no clones of me already
+                                replyingto.repliesToMe.push(myReplyNumber);
+                                let currReplies = this.state.replies;
+                                currReplies[replyingtoIndex] = replyingto // is a reference so no need to setState ... then immediately sets state ... (;_;),b
+                                this.setState({}) // to force update ;_; 
+                            }
                         }
                     }
                 }else{// > quote
@@ -126,11 +139,24 @@ export default class ViewThread extends Component{
         return (<div>{lines}</div>);
     }
 
-    scrollToReply(reply){
-
+    focusOnReply(reply){
+        console.log(reply)
+        let focussed = this.state.replies.find(rep => reply === rep.reply_number)
+        if(focussed){
+            let oldFocus = this.state.replies.find(rep => this.state.currentlyFocusedReply === rep.reply_number)
+            if(oldFocus){
+                oldFocus.isFocus = false;
+            }
+            focussed.isFocus = true;
+            this.setState({
+                currentlyFocusedReply: reply
+            })
+        }
     }
 
     clickedReplyNumber(reply){
+        console.log('clicked:')
+        console.log(reply)
         this.setState({
             postReplyText: reply.reply_number
         });
@@ -151,7 +177,10 @@ export default class ViewThread extends Component{
                         }
                         {   !this.state.error_message && //IF Don't display error message
                             <div className="container">
-                                <div className="c-border c-hoverable" style={{padding:"2vw"}}>
+                                <div 
+                                className="c-border c-hoverable" style={{padding:"2vw"}}
+                                id={"rep_"+this.state.thread_id}
+                                >
                                     <Draggable handle="strong">
                                         <div style={{display:"inline-block"}}> 
                                             <strong className="cursor" style={{cursor:"move", backgroundColor:"white", width:"4vw"}}>
@@ -164,9 +193,8 @@ export default class ViewThread extends Component{
                                         <h1 className="c-hoverable3 width container" style={{marginTop:"1vh"}}> {this.state.thread_head.thread_title}</h1>
                                         <p className="c-hoverable3 width container c-subtitle">
                                             <span className="c-hoverable4" title={"Thread Number: " + this.state.thread_head.thread_number}>[{this.state.thread_head.thread_number}]</span>
-                                            <span className="c-hoverable4" style={{marginLeft:"1vw"}} title={"Posted On: " +Date(this.state.thread_head.createdAt)}>[{Util.timeSince(this.state.thread_head.createdAt)} ago]</span>
                                             <span className="c-hoverable4" style={{marginLeft:"1vw"}} title={"Poster Name: " + this.state.thread_head.name}>[{this.state.thread_head.name}]</span>
-
+                                            <span className="c-hoverable4" style={{marginLeft:"1vw"}} title={"Posted On: " +Date(this.state.thread_head.createdAt)}>[{Util.timeSince(this.state.thread_head.createdAt)} ago]</span>
                                         </p>
                                         <p className="c-hoverable3 width container" style={{minHeight:"8vh"}}>{this.state.thread_head.body_text}</p>
                                     </div>
@@ -178,7 +206,7 @@ export default class ViewThread extends Component{
                                             <li 
                                             key={reply._id}
                                             id={"rep_"+reply.reply_number}
-                                            className="c-border c-hoverable container"
+                                            className={"c-border c-hoverable container "+(reply.isFocus && "c-focus c-drop-shadow")}
                                             style={{marginBottom:"1vh"}}
                                             >
                                                 <div className="container c-hoverable2" style={{margin:"1vh"}}>
@@ -193,7 +221,7 @@ export default class ViewThread extends Component{
                                                         )
                                                     }
                                                     <div className="c-hoverable3 width container c-subtitle" style={{borderLeft: "1px solid black", paddingLeft:"1vw"}}>
-                                                        <button dat={reply} onClick={() => this.clickedReplyNumber(reply)}>
+                                                        <button onClick={() => this.clickedReplyNumber(reply)} style={{border:'none', backgroundColor:"inherit"}}>
                                                             <span className="c-hoverable4" title={"Reply " + reply.local_reply_number + " of " + reply.reply_number + " replies"}>
                                                                 [{reply.local_reply_number} / {reply.reply_number}]
                                                             </span>
@@ -201,8 +229,25 @@ export default class ViewThread extends Component{
                                                         <span style={{marginLeft:"1vw"}} className="c-hoverable4" title={"Poster Name: " + reply.name}>[{reply.name}]</span>
                                                         <span style={{marginLeft:"1vw"}} className="c-hoverable4" title={"Posted On: " + Date(reply.createdAt)}>[{Util.timeSince(reply.createdAt)} ago]</span>
                                                     </div>
+                                                    <div className="c-hoverable3 width container c-subtitle">
+                                                        {
+                                                            (reply.repliesToMe) && // if this reply has any replies to it
+                                                            (
+                                                                reply.repliesToMe.map(rep => (
+                                                                    <HashLink
+                                                                    scroll={(el) => el.scrollIntoView({ behavior: 'smooth', block: 'center' })}
+                                                                    smooth
+                                                                    to={"#rep_"+rep}
+                                                                    onClick={() => this.focusOnReply(rep)}
+                                                                    >
+                                                                        {" >>"}{rep}
+                                                                    </HashLink>
+                                                                ))
+                                                            )
+                                                        }
+                                                    </div>
                                                     <div style={{borderLeft: "1px solid black", marginTop:"1vh", paddingLeft:"1vw"}} className="c-hoverable3">
-                                                        {this.markup(reply.body_text)}
+                                                        {this.markup(reply.body_text, reply.reply_number)}
                                                     </div>
                                                 </div>
                                             </li>

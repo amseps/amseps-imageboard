@@ -45,8 +45,12 @@
     margin-top: 0 !important;
 }
 
-.c-remove-styling, HashLink{
+.c-remove-styling{
     text-decoration: none;
+}
+
+.c-align-right{
+    align-self: flex-end;
 }
 
 .c-list{
@@ -136,6 +140,13 @@
     overflow: auto;
     resize: both;
 }
+.c-focus{
+    border-color: #FF0000 !important;
+}
+
+.c-bg{
+    background-color: #ffffff;
+}
 
 .m-quote{
     color: green;
@@ -152,4 +163,11 @@
 .m-outer-quoted{
     border: solid 1px lightslategrey;
     background-color: #d7fdfd;
+}
+
+.a-bottom-right{
+    position: fixed;
+    bottom:4px;
+    right:4px;
+    z-index: 2;
 }

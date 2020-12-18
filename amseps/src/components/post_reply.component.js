@@ -18,6 +18,7 @@ export default class PostReply extends Component{
         this.changeBodyText = this.changeBodyText.bind(this);
         this.changeImage = this.changeImage.bind(this);
         this.onDrop = this.onDrop.bind(this);
+        this.toggleReplyWidget = this.toggleReplyWidget.bind(this);
 
         this.state={
             supplied_text: (props.suppliedText)? props.suppliedText : "" ,
@@ -30,8 +31,7 @@ export default class PostReply extends Component{
 
             prevSuppliedText: -1,
 
-            m_target: null,
-            m_container: null,
+            showReplyWidget: false,
         };
     }
 
@@ -39,8 +39,8 @@ export default class PostReply extends Component{
 
     }
     componentDidUpdate(){
-        if(!(this.props.suppliedText === this.state.prevSuppliedText)){
-            let newtex = this.state.body_text + this.props.suppliedText.toString(); // .. you can't mutate strings specifically for textarea? that's surreal
+        if(this.props.suppliedText && !(this.props.suppliedText === this.state.prevSuppliedText)){
+            let newtex = this.state.body_text + ">>" + this.props.suppliedText.toString() + '\n'; // .. you can't mutate strings specifically for textarea? that's surreal
             this.setState({
                 prevSuppliedText: this.props.suppliedText,
                 body_text: newtex
@@ -99,6 +99,12 @@ export default class PostReply extends Component{
                 console.log("Post Reply Error: " + e);
             })
         }
+    }
+
+    toggleReplyWidget(){
+        this.setState({
+            showReplyWidget: (this.state.showReplyWidget)? false : true //why must u be like this javascript
+        })
     }
 
     onDrop(thread_image) {
@@ -173,6 +179,61 @@ export default class PostReply extends Component{
                         </form>
                     </div>
                 </div>
+                {(this.state.showReplyWidget)? //if replyWidget active
+                (
+                    <div className="a-bottom-right" style={{width:"30%"}}>
+                        <form onSubmit={this.submitReply} style={{padding:"1vw"}} className="c-border c-bg c-drop-shadow-sm">
+                            <div className="form-group c-no-vert-margins">
+                                <input type="text"
+                                placeholder="name"
+                                className="form-control"
+                                value={this.state.name}
+                                onChange={this.changeName}
+                                />
+                            </div>
+                            <div className="form-group c-no-vert-margins">
+                                <textarea
+                                type="text"
+                                rows="6"
+                                placeholder="body"
+                                required 
+                                className="form-control d-flex c-body-input mb-auto p-2"
+                                value={this.state.body_text}
+                                onChange={this.changeBodyText}
+                                style={{minHeight: '70px'}}
+                                />
+                            </div>
+                            <div style={{marginTop:'-2.5%', marginLeft:'1%', backgroundColor:"#ffffff", maxWidth:"5vw", paddingLeft:".3vw", backgroundColor:'white'}} className={this.state.counter_classname}>
+                                    [{this.state.body_text.length}/1024]
+                            </div>
+                            <div className="form-group c-no-vert-margins">
+                                <input type="file" 
+                                accept="image/*"
+                                className="form-control"
+                                onChange={this.changeImage}
+                                style={{marginTop:'1%'}}
+                                />
+                                <img style={{maxHeight:'30vh', maxWidth:'100%', marginTop:'3%', marginBottom:'3%'}} src={this.state.reply_image_preview} />
+                            </div>
+                            <div className="form-group c-no-vert-margins">
+                                <input type="submit" value="Post Reply" className="btn btn-primary" />
+                            </div>
+                        </form>
+                        <div className="d-flex align-items-right">
+                            <button onClick={() => this.toggleReplyWidget()} className="c-border c-bg c-drop-shadow-sm ml-auto" style={{marginTop:'4px'}}>
+                                <div style={{float:'right'}}>reply</div>
+                            </button>
+                        </div>
+                    </div>
+                ):( //replyWidget is inactive
+
+                    <div className="a-bottom-right">
+                        <button onClick={() => this.toggleReplyWidget()} className="c-border c-bg c-drop-shadow-sm">
+                            reply
+                        </button>
+                    </div>
+                )
+                }
             </div>
         );
     }

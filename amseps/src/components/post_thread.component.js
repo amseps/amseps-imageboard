@@ -134,12 +134,13 @@ export default class PostThread extends Component{
                         <textarea
                         placeholder="body"
                         required className="form-control d-flex c-body-input mb-auto p-2"
-                        value={this.state.body_text}
+                        value={<div>this.state.body_text</div>}
                         onChange={this.changeBodyText}
                         style={{minHeight:'70px'}}
                         />
                     </div>
-                    <div style={{marginTop:'-2.5%', marginLeft:'1%', backgroundColor:"#ffffff", maxWidth:"5vw", paddingLeft:".3vw", backgroundColor:'white'}} className={this.state.counter_classname}>
+                    <div style={{marginTop:'-2.5%', marginLeft:'1%', backgroundColor:"#ffffff", maxWidth:"5vw", paddingLeft:".3vw", backgroundColor:'white'}} 
+                    className={this.state.counter_classname}>
                             [{this.state.body_text.length}/1024]
                     </div>
                     <div></div>
