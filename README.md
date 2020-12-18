@@ -59,7 +59,7 @@ The website will then open in your browser and you are free to make changes :) M
     Error messages for post failures
     Loading circles , various loading states
     Thread and reply markup
-      
+    Second floating reply box
       
 
   	#TODO:
@@ -73,13 +73,12 @@ The website will then open in your browser and you are free to make changes :) M
           Five different types of votes, each with a color
           This is more for fun
       Add an icon!
-    Second floating reply box
     Implement Reply Peek 
       And markdown styling of replies and posts!
-    Reload page on upload
+    Reload page on upload HAS TO REACT TO RESPONSE FROM SERVER
       or just add new reply to the state)
       Also reload on reply
-    Add a better 'refresh' button than just refreshing page
+      Add a better 'refresh' button than just refreshing page
 
     Minimum Viable Product: ////////////////////////////////////////////////////////////////////
       Make static pages

@@ -22,6 +22,8 @@ export default class ViewThread extends Component{
         this.markup = this.markup.bind(this);
         this.clickedReplyNumber = this.clickedReplyNumber.bind(this);
         this.focusOnReply = this.focusOnReply.bind(this);
+        this.peekReplyPrep = this.peekReplyPrep.bind(this);
+        this.peekReplyEnd = this.peekReplyEnd.bind(this);
 
 
         this.state = {
@@ -35,6 +37,11 @@ export default class ViewThread extends Component{
 
             postReplyText: "",
             currentlyFocusedReply: -1,
+
+            showPeekedReply: false,
+            mouseX: 50,
+            mouseY: 50,
+            hoveredReply: null,
         }
 
     }
@@ -107,7 +114,9 @@ export default class ViewThread extends Component{
                             scroll={(el) => el.scrollIntoView({ behavior: 'smooth', block: 'center' })}
                             className="c-subtitle"
                             to={"#rep_"+replyingto.reply_number}
-                            onClick={(elem) => this.focusOnReply(replyingto.reply_number)}
+                            onClick={() => this.focusOnReply(replyingto.reply_number)}
+                            onMouseEnter={(elem) => this.peekReplyPrep(elem, replyingto.reply_number)}
+                            onMouseLeave={(elem) => this.peekReplyEnd(elem, replyingto.reply_number)}
                             >
                                 {">>"}
                                 <span className="m-quoted">
@@ -139,9 +148,8 @@ export default class ViewThread extends Component{
         return (<div>{lines}</div>);
     }
 
-    focusOnReply(reply){
-        console.log(reply)
-        let focussed = this.state.replies.find(rep => reply === rep.reply_number)
+    focusOnReply(repNum){
+        let focussed = this.state.replies.find(rep => repNum === rep.reply_number)
         if(focussed){
             let oldFocus = this.state.replies.find(rep => this.state.currentlyFocusedReply === rep.reply_number)
             if(oldFocus){
@@ -149,9 +157,26 @@ export default class ViewThread extends Component{
             }
             focussed.isFocus = true;
             this.setState({
-                currentlyFocusedReply: reply
+                currentlyFocusedReply: repNum
             })
         }
+    }
+
+    peekReplyPrep(e, repNum){
+        let focussed = this.state.replies.find(rep => repNum === rep.reply_number)
+        if(focussed){
+            this.setState({
+                showPeekedReply: true,
+                hoveredReply: focussed,
+                mouseX: e.screenX,
+                mouseY: e.screenY
+            })
+        }
+    }
+    peekReplyEnd(e, repNum){
+        this.setState({
+            showPeekedReply: false,
+        })
     }
 
     clickedReplyNumber(reply){
@@ -239,6 +264,8 @@ export default class ViewThread extends Component{
                                                                     smooth
                                                                     to={"#rep_"+rep}
                                                                     onClick={() => this.focusOnReply(rep)}
+                                                                    onMouseEnter={(elem) => this.peekReplyPrep(elem, rep)}
+                                                                    onMouseLeave={(elem) => this.peekReplyEnd(elem, rep)}
                                                                     >
                                                                         {" >>"}{rep}
                                                                     </HashLink>
@@ -255,6 +282,27 @@ export default class ViewThread extends Component{
                                     }
                                 </ul>
                                 <PostReply parentId={this.state.thread_id} suppliedText={this.state.postReplyText}/>
+                                {this.state.showPeekedReply && 
+                                    <div className="c-bg c-border c-subtitle" style={{position:'fixed', left:this.state.mouseX-window.screenX, top:this.state.mouseY-window.screenY, maxWidth:'30vw', padding:'4px'}}>
+                                        <div className="d-flex flex-column">
+                                            { this.state.hoveredReply.has_image && 
+                                                <div>
+                                                    [image]
+                                                </div>
+                                            }
+                                            <div className="c-subtitle flex-row c-subtitle">
+                                                <div className="d-flex justify-content-start">
+                                                    <span>[{this.state.hoveredReply.local_reply_number} / {this.state.hoveredReply.reply_number}]</span>
+                                                    <span>[{this.state.hoveredReply.name}]</span>
+                                                    <span>[{Util.timeSince(this.state.hoveredReply.createdAt)} ago]</span>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                {this.markup(this.state.hoveredReply.body_text, this.state.hoveredReply.reply_number)}
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
                             </div>
                         }
                     </div>
