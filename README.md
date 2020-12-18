@@ -60,6 +60,8 @@ The website will then open in your browser and you are free to make changes :) M
     Loading circles , various loading states
     Thread and reply markup
     Second floating reply box
+        Implement Reply Peek 
+      And markdown styling of replies and posts!
       
 
   	#TODO:
@@ -73,8 +75,7 @@ The website will then open in your browser and you are free to make changes :) M
           Five different types of votes, each with a color
           This is more for fun
       Add an icon!
-    Implement Reply Peek 
-      And markdown styling of replies and posts!
+    clicking replynum opens replywidget
     Reload page on upload HAS TO REACT TO RESPONSE FROM SERVER
       or just add new reply to the state)
       Also reload on reply
@@ -86,6 +87,7 @@ The website will then open in your browser and you are free to make changes :) M
         Homepage ?: maybe some dynamic lelements on that page
         Rules page
         Meme pages :)
+      Darkmode?
       Small icons for input fields and general things
       Implement Notes:
         Notes are brief messages you can leave that will directly tail a post
