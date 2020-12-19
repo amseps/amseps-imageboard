@@ -34,32 +34,32 @@ The website will then open in your browser and you are free to make changes :) M
 # Vague Roadmap because using monday.com is for noobs
 ```
   	#DONE:
-    Init setups
-    Mongodb basics
-    Routes and Models basics
-    GET and POST basics for Threads only
-    Work on giving replies to Threads
-    Replies to threads!
-    Reply numbers!
-    Images :
+    ↑ Init setups
+    ↑ Mongodb basics
+    ↑ Routes and Models basics
+    ↑ GET and POST basics for Threads only
+    ↑ Work on giving replies to Threads
+    ↑ Replies to threads!
+    ↑ Reply numbers!
+    ↑ Images :
           Give threads a datafield for number of replies
       run everything client side fuck these kidz
       metrics for each thread on the catalog
       make catalog grid instead of list :)
         make it a dynamic list also
-    FIX THE STYLING O M G
+    ↑ FIX THE STYLING O M G
           Make it look nicer
         Cleaning up bootstrap
         Custom shits 
         Just cleanup dogge
         That shit look like the mf apple store
-    Images for replies
+    ↑ Images for replies
       Lazy Loading of images!
       thumbnails for images
-    Error messages for post failures
-    Loading circles , various loading states
-    Thread and reply markup
-    Second floating reply box
+    ↑ Error messages for post failures
+    ↑ Loading circles , various loading states
+    ↑ Thread and reply markup
+    ↑ Second floating reply box
         Implement Reply Peek 
       And markdown styling of replies and posts!
       
@@ -67,102 +67,101 @@ The website will then open in your browser and you are free to make changes :) M
   	#TODO:
 
     Actionable: //////////////////////////////////////////////////////////////////////////////////
-    Testing?
-    Mini-votes:
-        gold -> gold/brown, sparkle -> white/purple, clover -> green/black, fire -> red/orange, melon ->pink/green
-          Threads and replies are able to be voted on.
-          These votes have no real meaning , but they do display a cool number that you can click up to ... five? times per person
-          Five different types of votes, each with a color
-          This is more for fun
-      Add an icon!
-    clicking replynum opens replywidget
-    Reload page on upload HAS TO REACT TO RESPONSE FROM SERVER
+    ↑ Add an icon!
+    ↑ clicking replynum opens replywidget
+    ↑ Reload page on upload HAS TO REACT TO RESPONSE FROM SERVER
       or just add new reply to the state)
       Also reload on reply
       Add a better 'refresh' button than just refreshing page
 
     Minimum Viable Product: ////////////////////////////////////////////////////////////////////
-      Make static pages
-        IMPORTANT
-        Homepage ?: maybe some dynamic lelements on that page
+      ↑ Make static pages
         Rules page
         Meme pages :)
-      Darkmode?
-      Small icons for input fields and general things
-      Implement Notes:
-        Notes are brief messages you can leave that will directly tail a post
-          No images allowed, like 128 characters max
-            These notes will feature in a scrollable list at the end of that thread or reply header
-        Notes on anything
-          Notes only have one vote option , red circle
-      Implement Little threads functions (ignore this user, hide reply etc)
-      Add styling to headerbar
+      
+      ↑ Add styling to headerbar
         Like on hover AMSEPS change color
         Come up with a better name?
-      Style 404
+     ↑ Style 404
         Other error messages ?
-      Admin controls
+      ↑ Admin controls
         Delete Threads
         Edit threads
-      Security Fixations
+      ↑ Security Fixations
         Make it so you can't just GET /world or whatever
           bc boy that just aint right
             https://security.stackexchange.com/questions/33837/get-vs-post-which-is-more-secure 
             https://www.netsparker.com/blog/web-security/rest-api-web-service-security/ 
             Although it appears that CRUD security should be handled through mongodb controls rather than server.js
-        Using Captchas for posts https://www.npmjs.com/package/react-google-recaptcha
+      ↑ Using Captchas for posts https://www.npmjs.com/package/react-google-recaptcha
           https://www.npmjs.com/package/react-google-recaptcha-v3 
-        Better stability in recieving posts
-        Better clientside controls to help the user post the correct things
-      Rewrite Error log for backend, (and frontend :))
-        Also make it return more proper jsons from response
-      Archiving old threads? How will it work
+      ↑ Better clientside controls to help the user post the correct things
+        IE: (sorry! you can only posts gifs! or something like that)
+      ↑ Rewrite Error log for backend, (and frontend :))
+      ↑ Archiving old threads? How will it work
         Just have a field like archived: true
         Server automatically archives old content , date of archival
-      Get some handsome graphicks
+        as well as pinned content
+
+    Instantly after MVP:
+      ↑ Mini-votes:
+        gold -> gold/brown, sparkle -> white/purple, clover -> green/black, fire -> red/orange, melon ->pink/green
+          Threads and replies are able to be voted on.
+          These votes have no real meaning , but they do display a cool number that you can click up to ... five? times per person
+          Five different types of votes, each with a color
+          This is more for fun
+      ↑ Darkmode?
+      ↑ Small icons for input fields and general things
+      ↑ Implement Notes:
+        Notes are brief messages you can leave that will directly tail a post
+          No images allowed, like 128 characters max
+            These notes will feature in a scrollable list at the end of that thread or reply header
+        Notes on anything
+          Notes only have one vote option , red circle
+      ↑ Implement Little threads functions (ignore this user, hide reply etc)
+      ↑ Get some handsome graphicks
         Ness
         Soure
         Photoshoppe
-      Post it on tha mf innernet
 
     Other Goals: //////////////////////////////////////////////////////////////////////////////////
-      Show amount of people currently viewing thread
-      Have Badges turn red when there is a new recent post from catalog
-      Variable title? in the tab
+      ↑ Show amount of people currently viewing thread
+      ↑ Have Badges turn red when there is a new recent post from catalog
+      ↑ Variable title? in the tab
         meaning that the title in the browser tab is variable
         Based on how many 'notifications' are in current thread
           Like:
             (5) Threadname
-      Search
+      ↑ Search
         Searching a catalog for individual threads
         Or a thread for replies?
         Or maybe both at tha same time
-    Smooth transitions
+      ↑ Smooth transitions
         When you refresh it smoothly includes new threads, shuffles order, and removes old ones
         Smooth introduction of new replies
-    Linking between threads make easy
-    Settings in top right
-    Inlcude more usability
-      alt and title tags for everything
-    Dark Mode!
-    Global Inspection of threads
-      Such as "featured post" that has a lot of views or votes
-    Implement amount of times a thread has been viewed!
-    IP accounts
-      Amount of votes a poster has recieved
-      Amout of views a poster has recieved?
-      Show my currently posted threads
+      ↑ Linking between threads make easy
+      ↑ Settings in top right
+      ↑ Inlcude more usability
+        alt and title tags for everything
+      ↑ Dark Mode!
+      ↑ Global Inspection of threads
+        Such as "featured post" that has a lot of views or votes
+      ↑ Implement amount of times a thread has been viewed!
+      ↑ IP accounts
+        Amount of votes a poster has recieved
+        Amout of views a poster has recieved?
+        Show my currently posted threads
 
     #STRETCH GOALS: //////////////////////////////////////////////////////////////////////////////////
-      EPIC Chat Feature
-      Separate boards ?
-      ADVERTISE SHITTE
-      ROBOT automod
+      ↑ EPIC Chat Feature
+      ↑ Separate boards ?
+      ↑ ADVERTISE SHITTE
+      ↑ ROBOT automod
         Delete SHIT before it is posted
         Delete SHIT AFTER it is posted
         Delete SHITTY replies ?
         Censor SHIT images :)
-      Ape autoposters :)
+      ↑ Ape autoposters :)
 
     #Maybe?:
       Open source? fuk that lole
