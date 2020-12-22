@@ -134,7 +134,7 @@ export default class PostThread extends Component{
                         <textarea
                         placeholder="body"
                         required className="form-control d-flex c-body-input mb-auto p-2"
-                        value={<div>this.state.body_text</div>}
+                        value={this.state.body_text}
                         onChange={this.changeBodyText}
                         style={{minHeight:'70px'}}
                         />
