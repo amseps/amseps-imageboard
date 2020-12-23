@@ -104,14 +104,14 @@ export default class ViewThread extends Component{
             if(lines[i][0] && lines[i][0] === '>'){
                 if(lines[i][1] && lines[i][1] === '>'){
                     if(lines[i][1] && lines[i][2] === '>'){ //superquote
-                        lines[i] = <span className="m-superquote">{lines[i]}</span>
+                        lines[i] = <span key={i} className="m-superquote">{lines[i]}</span>
                     }else{// >> doublequote // also as it stands you are not allowed to reply to the thread itself
                         let replynum = parseInt(lines[i].substring(2));
                         let replyingtoIndex = allReplies.findIndex(reply => reply.reply_number === replynum);
                         let replyingto = allReplies[replyingtoIndex];
                         if(replyingto){ // if we found something it's replying to
                             lines[i] = 
-                            <HashLink 
+                            <HashLink key={replyingto.reply_number}
                             style={{textDecoration:'none'}}
                             smooth
                             scroll={(el) => el.scrollIntoView({ behavior: 'smooth', block: 'center' })}
@@ -135,17 +135,17 @@ export default class ViewThread extends Component{
                             if(ind < 0){ // if there are no clones of me already
                                 replyingto.repliesToMe.push(myReplyNumber);
                                 let currReplies = allReplies;
-                                currReplies[replyingtoIndex] = replyingto // is a reference so no need to setState ... (;_;),b
+                                currReplies[replyingtoIndex] = replyingto //  ... (;_;),b
                             }
                         }
                     }
                 }else{// > quote
-                    lines[i] = <span className="m-quote">{lines[i]}</span>
+                    lines[i] = <span className="m-quote" key={i}>{lines[i]}</span>
                 }
             }else{//not a quote
 
             }
-            lines[i] = <span>{lines[i]}<br/></span>
+            lines[i] = <span key={i}>{lines[i]}<br/></span>
         }
         return (<div>{lines}</div>);
     }
@@ -201,7 +201,7 @@ export default class ViewThread extends Component{
 
     render(){
         return(
-            <div>
+            <div key={0}>
                 { (!this.state.isloading)?
                 (
                     <div>
@@ -243,7 +243,7 @@ export default class ViewThread extends Component{
                                 {
                                         this.state.replies.map((reply, index) => 
                                             <li 
-                                            key={reply.id}
+                                            key={reply._id}
                                             id={"rep_"+reply.reply_number}
                                             className={"c-border c-hoverable container "+(reply.isFocus && "c-focus c-drop-shadow")}
                                             style={{marginBottom:"1vh"}}
@@ -274,7 +274,7 @@ export default class ViewThread extends Component{
                                                             (
                                                                 reply.repliesToMe.map(rep => (
                                                                     <HashLink
-                                                                    key={rep.id}
+                                                                    key={rep}
                                                                     scroll={(el) => el.scrollIntoView({ behavior: 'smooth', block: 'center' })}
                                                                     smooth
                                                                     to={"#rep_"+rep}
