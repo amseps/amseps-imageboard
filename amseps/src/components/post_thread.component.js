@@ -139,7 +139,7 @@ export default class PostThread extends Component{
                         style={{minHeight:'70px'}}
                         />
                     </div>
-                    <div style={{marginTop:'-2.5%', marginLeft:'1%', backgroundColor:"#ffffff", maxWidth:"5vw", paddingLeft:".3vw", backgroundColor:'white'}} 
+                    <div style={{marginTop:'-2.5%', marginLeft:'1%', backgroundColor:"#ffffff", maxWidth:"5vw", paddingLeft:".3vw"}} 
                     className={this.state.counter_classname}>
                             [{this.state.body_text.length}/1024]
                     </div>
@@ -152,7 +152,7 @@ export default class PostThread extends Component{
                         onChange={this.changeImage}
                         style={{marginTop:'1%'}}
                         />
-                        <img style={{maxHeight:'30vh', maxWidth:'100%', marginTop:'3%', marginBottom:'3%'}} src={this.state.thread_image_preview} />
+                        <img style={{maxHeight:'30vh', maxWidth:'100%', marginTop:'3%', marginBottom:'3%'}} src={this.state.thread_image_preview} alt={"Preview of what to post"}/>
                     </div>
                     <div className="form-group">
                         <input type="submit" value="Post Thread" className="btn btn-primary" />

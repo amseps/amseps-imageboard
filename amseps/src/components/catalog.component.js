@@ -60,7 +60,7 @@ export default class Catalog extends Component{
                         {this.state.threads_loaded &&
                             (   //threads have loaded
                                 this.state.threads.map((thread) => (
-                                    <div style={{marginBottom: '1.5%'}} key={thread._id}>
+                                    <div style={{marginBottom: '1.5%'}} key={thread.id}>
                                         <li 
                                         key={thread._id} 
                                         className="container c-list c-padding-md c-clickable c-border c-drop-shadow"
@@ -90,8 +90,8 @@ export default class Catalog extends Component{
                         }
                         {!this.state.threads_loaded &&
                             (   //threads not loaded yet
-                                <div class="spinner-border" role="status">
-                                    <span class="sr-only">Loading...</span>
+                                <div className="spinner-border" role="status">
+                                    <span className="sr-only">Loading...</span>
                                 </div>
                             )
                         }

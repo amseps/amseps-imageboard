@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
-import {Link} from 'react-router-dom';
+//import {Link} from 'react-router-dom';
 import axios from 'axios';
 
 import imageCompression from 'browser-image-compression'
 
-import noimage from './../common_images/noimage.png';
+//import noimage from './../common_images/noimage.png';
+ 
+//import {Badge, Toast} from 'react-bootstrap'
 
 
 export default class PostReply extends Component{
@@ -19,15 +21,21 @@ export default class PostReply extends Component{
         this.changeImage = this.changeImage.bind(this);
         this.onDrop = this.onDrop.bind(this);
         this.toggleReplyWidget = this.toggleReplyWidget.bind(this);
+        this.newToast = this.newToast.bind(this);
+        this.closeToast = this.closeToast.bind(this);
 
         this.state={
             supplied_text: (props.suppliedText)? props.suppliedText : "" ,
+            //this.props.refreshParent();
             error_text: "",
             body_text: "",
             name: "",
             reply_image: "",
             reply_image_preview: "",
             counter_classname: "c-border-light",
+            submitting_reply: false,
+            toasts: [], //[{}]
+            toast_id_counter: 0,
 
             prevSuppliedText: -1,
 
@@ -60,11 +68,34 @@ export default class PostReply extends Component{
         });
     }
 
+    async newToast(myhead, mybody){
+        let newtoasts  = JSON.parse(JSON.stringify(this.state.toasts)); 
+        newtoasts.push({
+                head: myhead,
+                body: mybody,
+                id: this.state.toast_id_counter
+            })
+        let count = this.state.toast_id_counter + 1;
+        this.setState({
+            toasts: newtoasts,
+            toast_id_counter: count
+        })
+    }
 
+    async closeToast(e, toastid){
+        e.preventDefault();
+        console.log('trying to delete taost: ' , toastid)
+        let newtoasts  = JSON.parse(JSON.stringify(this.state.toasts));
+        console.log(newtoasts)
+        newtoasts = newtoasts.filter(elem => elem.id !== toastid);
+        console.log(newtoasts)
+        this.setState({toasts:newtoasts});
+    }
 
-    submitReply(e){
+    async submitReply(e){
         e.preventDefault();
         console.log("Submitting Reply");
+        this.setState({submitting_reply:true})
         let formData = new FormData();
         formData.append('body_text', this.state.body_text);
         formData.append('name', this.state.name);
@@ -83,10 +114,13 @@ export default class PostReply extends Component{
                 axios.post("http://localhost:5000/thread/" + this.props.parentId + "/post_reply", formData, config)
                 .then(res =>{
                     console.log("Reply posted succesfully: ");
-                    console.log(res.data);
+                    if(res)console.log(res.data);
+                    console.log('trying to refresh parent')
+                    this.props.refreshParent();
                 })
                 .catch(e => {
-                    console.log("Post Reply Error: " + e);
+                    console.log("111 Post Reply Error: " + e);
+                    this.newToast("Reply Fail", "Could not post your reply because: " + e.response.data.info);
                 })
             })
         }else{ // if no image
@@ -94,11 +128,15 @@ export default class PostReply extends Component{
             .then(res =>{
                 console.log("Reply posted succesfully: ");
                 console.log(res.data);
+                console.log('trying to refresh parent')
+                this.props.refreshParent();
             })
             .catch(e => {
-                console.log("Post Reply Error: " + e);
+                console.log("222 Post Reply Error: " + e);
+                this.newToast("Reply Fail", "Could not post your reply");
             })
         }
+        this.setState({submitting_reply:false})
     }
 
     toggleReplyWidget(){
@@ -161,7 +199,7 @@ export default class PostReply extends Component{
                                 style={{minHeight: '70px'}}
                                 />
                             </div>
-                            <div style={{marginTop:'-2.5%', marginLeft:'1%', backgroundColor:"#ffffff", maxWidth:"5vw", paddingLeft:".3vw", backgroundColor:'white'}} className={this.state.counter_classname}>
+                            <div style={{marginTop:'-2.5%', marginLeft:'1%', backgroundColor:"#ffffff", maxWidth:"5vw", paddingLeft:".3vw"}} className={this.state.counter_classname}>
                                     [{this.state.body_text.length}/1024]
                             </div>
                             <div className="form-group c-no-vert-margins">
@@ -171,10 +209,18 @@ export default class PostReply extends Component{
                                 onChange={this.changeImage}
                                 style={{marginTop:'1%'}}
                                 />
-                                <img style={{maxHeight:'30vh', maxWidth:'100%', marginTop:'3%', marginBottom:'3%'}} src={this.state.reply_image_preview} />
+                                <img style={{maxHeight:'30vh', maxWidth:'100%', marginTop:'3%', marginBottom:'3%'}} src={this.state.reply_image_preview} alt={"What to post"}/>
                             </div>
-                            <div className="form-group c-no-vert-margins">
+                            <div className="form-group c-no-vert-margins d-flex row">
                                 <input type="submit" value="Post Reply" className="btn btn-primary" />
+                                {   this.state.submitting_reply &&
+                                    <div className="d-flex row">
+                                        <div className="spinner-border text-center" role="status" style={{marginLeft:'2vw'}}>
+                                            <span className="sr-only"></span>
+                                        </div>
+                                        Posting Reply... 
+                                    </div>
+                                }
                             </div>
                         </form>
                     </div>
@@ -203,7 +249,7 @@ export default class PostReply extends Component{
                                 style={{minHeight: '70px'}}
                                 />
                             </div>
-                            <div style={{marginTop:'-2.5%', marginLeft:'1%', backgroundColor:"#ffffff", maxWidth:"5vw", paddingLeft:".3vw", backgroundColor:'white'}} className={this.state.counter_classname}>
+                            <div style={{marginTop:'-2.5%', marginLeft:'1%', backgroundColor:"#ffffff", maxWidth:"5vw", paddingLeft:".3vw"}} className={this.state.counter_classname}>
                                     [{this.state.body_text.length}/1024]
                             </div>
                             <div className="form-group c-no-vert-margins">
@@ -213,7 +259,7 @@ export default class PostReply extends Component{
                                 onChange={this.changeImage}
                                 style={{marginTop:'1%'}}
                                 />
-                                <img style={{maxHeight:'30vh', maxWidth:'100%', marginTop:'3%', marginBottom:'3%'}} src={this.state.reply_image_preview} />
+                                <img style={{maxHeight:'30vh', maxWidth:'100%', marginTop:'3%', marginBottom:'3%'}} src={this.state.reply_image_preview} alt={""}/>
                             </div>
                             <div className="form-group c-no-vert-margins">
                                 <input type="submit" value="Post Reply" className="btn btn-primary" />
@@ -234,6 +280,21 @@ export default class PostReply extends Component{
                     </div>
                 )
                 }
+                <div className="a-toast">
+                    {   //errors in the top right corner
+                        this.state.toasts.map((thistoast) => 
+                            <div key={thistoast.id} className="c-border c-no-rounded-corners" style={{padding:'8px'}}>
+                                <div className="d-flex row">
+                                    <button onClick={e => this.closeToast(e, thistoast.id)} className="c-border c-br-drop-shadow">
+                                        <div className="justify-content-center c-no-rounded-corners" style={{marginLeft:'8px'}}>{thistoast.id}</div>
+                                    </button>
+                                    <div className="mr-auto" style={{marginLeft:'8px'}}>{thistoast.head}</div>
+                                </div>
+                                <div>{thistoast.body}</div>
+                            </div>
+                        )
+                    }
+                </div>
             </div>
         );
     }

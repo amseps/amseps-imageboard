@@ -73,6 +73,7 @@ The website will then open in your browser and you are free to make changes :) M
       or just add new reply to the state)
       Also reload on reply
       Add a better 'refresh' button than just refreshing page
+    ↑ Make noimage local instead of sending an image get request
 
     Minimum Viable Product: ////////////////////////////////////////////////////////////////////
       ↑ Make static pages
@@ -102,6 +103,7 @@ The website will then open in your browser and you are free to make changes :) M
         Just have a field like archived: true
         Server automatically archives old content , date of archival
         as well as pinned content
+      ↑ catch when file isn't an image ?
 
     Instantly after MVP:
       ↑ Mini-votes:

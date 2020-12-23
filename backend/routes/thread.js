@@ -12,13 +12,12 @@ let World = require('../models/world.model');
 //makes images work//////////////////////////////////////////////////////////////////////////
 
 const fileFilter = (req, file, cb) => {
-    if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
-        console.log("upload multer file: ");
+    if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg" || file.mimetype == "image/gif") {
         console.log(file);
         cb(null, true);
     } else {
         cb(null, false);
-        return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
+        return cb(new Error('Only .png, .jpg .jpeg and .gif format allowed!'));
     }
 }
 
@@ -56,22 +55,20 @@ const storage_replies = multer.diskStorage({
         cb(null, Date.now() + '_' + fileName)
     }
 });
-
-
-const upload = multer({storage: storage, fileFilter: fileFilter});
-const upload_replies = multer({storage: storage_replies, fileFilter: fileFilter});
+const m_limits = {fileSize:1048576} // 2mb
+const upload = multer({storage: storage, fileFilter: fileFilter, limits: m_limits});
+const upload_replies = multer({storage: storage_replies, fileFilter: fileFilter, limits: m_limits});
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 router.get("/:id/image/thumb", (req, res) => {
-    console.log("Want Thread Image");
     Thread.findById(req.params.id)
     .then((thread, err) => {
         if(thread){
             res.set("Content-Type", thread.thread_image_type);
             res.send(fs.readFileSync("./images/thumb/" + thread.thread_thumb_filename));
         }else{
-            console.log("Couldn't find the image");
+            console.log("Couldn't find the image err: " + err);
             res.set("Content-Type", "image/png");
             res.send(fs.readFileSync("./images/common_images/noimage.png"));
         }
@@ -89,7 +86,7 @@ router.get("/:id/image", (req, res) => {
             res.set("Content-Type", thread.thread_image_type);
             res.send(fs.readFileSync("./images/" + thread.thread_image_filename));
         }else{
-            console.log("Couldn't find the image");
+            console.log("Couldn't find the image err: " + err);
             res.set("Content-Type", "image/png");
             res.send(fs.readFileSync("./images/common_images/noimage.png"));
         }
@@ -101,16 +98,14 @@ router.get("/:id/image", (req, res) => {
 });
 
 router.get("/:id/image/:reply", (req, res) => {
-    console.log("Want Reply Image");
     Reply.findById(req.params.reply)
     .then((reply, err) => {
         if(reply){
             console.log(reply);
             res.set("Content-Type", reply.reply_image_type);
-            console.log(reply.reply_image);
             res.send(fs.readFileSync("./images/images_replies/" + reply.reply_image_filename));
         }else{
-            console.log("Couldn't find the image");
+            console.log("Couldn't find the image err: " + err);
             res.set("Content-Type", "image/png");
             res.send(fs.readFileSync("./images/common_images/noimage.png"));
         }
@@ -130,7 +125,7 @@ router.get("/:id/image/:reply/thumb", (req, res) => {
             console.log(reply.reply_image);
             res.send(fs.readFileSync("./images/images_replies/thumb/" + reply.reply_thumb_filename));
         }else{
-            console.log("Couldn't find the image");
+            console.log("Couldn't find the image err: " + err);
             res.set("Content-Type", "image/png");
             res.send(fs.readFileSync("./images/common_images/noimage.png"));
         }
@@ -142,11 +137,14 @@ router.get("/:id/image/:reply/thumb", (req, res) => {
 });
 
 router.post('/post_thread', 
-upload.fields([
-    {name:'thread_image', max_count:1},
-    {name:'thread_image_thumb', max_count:1}
-]),
+upload.fields(
+    [
+        {name:'thread_image', max_count:1},
+        {name:'thread_image_thumb', max_count:1}
+    ],   
+),
 (req, res, next) => { // if POST <host>/thread/post_thread
+    console.log('post thread?')
     try {// if image succeeded ...
         World.findOne()
         .then(theworld => {
@@ -184,15 +182,17 @@ upload.fields([
                 .then(() => {
                     console.log("New Thread Added: " + ThreadData.thread_number + " @ " +ThreadData.id)
                 }).catch(err => {
-
+                    res.status(400).json({info:"bad"})
                 })
             }).catch(err =>{
-                console.log("Failed to post thread");
+                res.status(400).json({info:"bad"})
             })
         }).catch(err => {
+            res.status(500).json({info:"uh oh"})
             console.log("Failed to Access World");
         });
     } catch (error) {
+        res.status(500).json({info:"uh oh"})
         console.error(error);
     }
 });
@@ -200,7 +200,7 @@ upload.fields([
 router.route('/').get((req, res) => { //if GET <host>/thread/ -> do this
     Thread.find()
     .then(threads => res.json(threads))
-    .catch(err => res.status(400).json('Error: ' + err));
+    .catch(err => res.status(400).json({info:'ERROR; Failed to find thread: ' + err}));
 });
 
 router.route('/:id').get((req, res) => { //if GET <host>/thread/threadid -> do this
@@ -208,7 +208,7 @@ router.route('/:id').get((req, res) => { //if GET <host>/thread/threadid -> do t
     .then(thisThread => {
         res.json(thisThread)
     })
-    .catch(err => res.status(400).json('Error: ' + err));
+    .catch(err => res.status(400).json({info:'ERROR; Failed to find thread of id ' + req.params.id + err}));
 });
 
 router.route('/:id/replies').get((req, res) => {
@@ -217,17 +217,17 @@ router.route('/:id/replies').get((req, res) => {
     then(replies =>{
         res.json(replies);
     }).catch(err=>{
-        res.status(400).json('Error ' + err);
+        res.status(204).json('Current thread has no replies '+  + err);
     })
 });
 
 router.post('/:id/post_reply', 
 upload_replies.fields([
-    {name:'reply_image', maxCount:1},
-    {name:'reply_image_thumb', maxCount:1}
-]),
- (req, res, next) => {
-    console.log("Cool New Reply");
+        {name:'reply_image', maxCount:1},
+        {name:'reply_image_thumb', maxCount:1}
+    ]
+),
+(req, res, next) => {
     try{
         Thread.findOne({_id: req.params.id})
         .then(up_par_thread => {
@@ -267,24 +267,29 @@ upload_replies.fields([
                         const newReply = new Reply(ReplyData);
                         newReply.save()
                         .then(() => {
-                            res.json('Reply Added!');
+                            res.status(200).json('Reply Added!');
                         }).catch(err => {
-                            res.status(400).json('Error: ' + err);
+                            res.status(400).json({info:'ERROR: Failed to post ' + err});
                         });
                     }).catch(err => {
                         console.log("Could not reach the world ... a glitch in the matrix... " + err);
+                        res.status(400).json({info:'ERROR: Failed to post ' + err});
                     })
                 }).catch(err => {
                     console.log("Could not reach the world " + err);
+                    res.status(400).json({info:'ERROR: Failed to post ' + err});
                 })
             }).catch(err =>{
                 console.log("Can not find my self" + err);
+                res.status(400).json({info:'ERROR: Failed to post ' + err});
             })
         }).catch(err => {
             console.log("Can't find my parent");
+            res.status(400).json({info:'ERROR: Failed to post ' + err});
         });
     }catch(err){
-        console.log("error in posting replyL " + err);
+        console.log("error in posting reply " + err);
+        res.status(400).json({info:'ERROR: Failed to post ' + err});
     }
 });
 

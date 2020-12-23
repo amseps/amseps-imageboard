@@ -50,7 +50,7 @@ export default class Catalog extends Component{
                 (//if use thumb
                     <div>
                         {!this.state.thumb_loaded && // if loading thumb
-                            <div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>
+                            <div className="spinner-border" role="status"><span className="sr-only">Loading...</span></div>
                         }
                         <LazyLoadImage 
                         src={this.props.thumbimg} 
@@ -64,7 +64,7 @@ export default class Catalog extends Component{
                 (//if using full image
                     <div>
                         {!this.state.full_loaded && // if loading thumb
-                            <div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>
+                            <div className="spinner-border" role="status"><span className="sr-only">Loading...</span></div>
                         }
                         <LazyLoadImage 
                         src={this.props.fullimg}

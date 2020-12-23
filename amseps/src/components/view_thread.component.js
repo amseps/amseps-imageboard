@@ -3,7 +3,7 @@ import axios from 'axios';
 import {Link} from "react-router-dom";
 import Util from './../utility';
 import LazyImage from './lazyimage.component';
-import Draggable from 'react-draggable'; // The default
+//import Draggable from 'react-draggable'; // The default
 import { HashLink } from 'react-router-hash-link';
 
 import PostReply from './post_reply.component';
@@ -15,22 +15,20 @@ export default class ViewThread extends Component{
     constructor(props){
         super(props);
 
-        const active = (this.props.match && this.props.match.params && this.props.match.params.id);
-
         this.refreshPage = this.refreshPage.bind(this);
         this.onDrop = this.onDrop.bind(this);
         this.markup = this.markup.bind(this);
+        this.processReplies = this.processReplies.bind(this);
         this.clickedReplyNumber = this.clickedReplyNumber.bind(this);
         this.focusOnReply = this.focusOnReply.bind(this);
         this.peekReplyPrep = this.peekReplyPrep.bind(this);
         this.peekReplyEnd = this.peekReplyEnd.bind(this);
 
-
         this.state = {
             thread_head: {},
             replies: [{_id:""}],
             error_message: false,
-            defined: active,
+            error_message_info: "",
             thread_id: -1,
             pictures: [],
             isloading: true,
@@ -54,39 +52,44 @@ export default class ViewThread extends Component{
 
     }
 
-    refreshPage(){
-        const active = (this.props.match && this.props.match.params && this.props.match.params.id && this.props.match.params.id !== this.state.thread_id);
-        if(active){
-            const new_id = this.props.match.params.id;
-            this.setState({ //need the consts bc otherwise the delay in state breaks it
-                thread_id: new_id
-            })
-            axios.get("http://localhost:5000/thread/" + new_id)
-            .then(thread => { //maybe combines this with the next
+    async refreshPage(){
+        this.setState({isloading:true})
+        const new_id = this.props.match.params.id;
+        this.setState({ //need the consts bc otherwise the delay in state breaks it
+            thread_id: new_id
+        })
+        axios.get("http://localhost:5000/thread/" + new_id)
+        .then(thread => { //maybe combines this with the next
+            this.setState({
+                thread_head: thread.data,
+                error_message: false
+            });
+            axios.get("http://localhost:5000/thread/" + new_id + "/replies")
+            .then(replies => {
                 this.setState({
-                    thread_head: thread.data,
-                    error_message: false
-                });
-                axios.get("http://localhost:5000/thread/" + new_id + "/replies")
-                .then(replies => {
-                    this.setState({
-                        replies: replies.data,
-                        error_message: false,
-                        isloading: false,
-                    })
-                }).catch(err => {
+                    error_message: false,
+                    isloading: false,
+                    //do replies in the function below
+                })
+                this.processReplies(replies.data);
+            }).catch(err => {
+                if(err.response.status === 204){
+                    console.log("204, No replies to show")
+                }else{ // 400 ...
                     this.setState({
                         error_message: true,
                         isloading: false,
-                    })
-                });
-            }).catch(error => {
-                this.setState({
-                    error_message: true,
-                    isloading: false,
-                })
+                    });
+                }
+            });
+        }).catch(error => {
+            this.setState({
+                error_message: true,
+                error_message_info: error.response.data.info,
+                isloading: false,
             })
-        }
+        })
+        this.setState({isloading:false})
     }
 
     onDrop(picture) {
@@ -95,7 +98,7 @@ export default class ViewThread extends Component{
         });
     }
 
-    markup(text, myReplyNumber){
+    markup(text, myReplyNumber, allReplies){
         let lines = text.split('\n');
         for(let i = 0 ; i < lines.length; i++){
             if(lines[i][0] && lines[i][0] === '>'){
@@ -104,8 +107,8 @@ export default class ViewThread extends Component{
                         lines[i] = <span className="m-superquote">{lines[i]}</span>
                     }else{// >> doublequote // also as it stands you are not allowed to reply to the thread itself
                         let replynum = parseInt(lines[i].substring(2));
-                        let replyingtoIndex = this.state.replies.findIndex(reply => reply.reply_number === replynum);
-                        let replyingto = this.state.replies[replyingtoIndex];
+                        let replyingtoIndex = allReplies.findIndex(reply => reply.reply_number === replynum);
+                        let replyingto = allReplies[replyingtoIndex];
                         if(replyingto){ // if we found something it's replying to
                             lines[i] = 
                             <HashLink 
@@ -131,9 +134,8 @@ export default class ViewThread extends Component{
                             const ind = replyingto.repliesToMe.findIndex(elem => elem === myReplyNumber);
                             if(ind < 0){ // if there are no clones of me already
                                 replyingto.repliesToMe.push(myReplyNumber);
-                                let currReplies = this.state.replies;
-                                currReplies[replyingtoIndex] = replyingto // is a reference so no need to setState ... then immediately sets state ... (;_;),b
-                                this.setState({}) // to force update ;_; 
+                                let currReplies = allReplies;
+                                currReplies[replyingtoIndex] = replyingto // is a reference so no need to setState ... (;_;),b
                             }
                         }
                     }
@@ -147,6 +149,18 @@ export default class ViewThread extends Component{
         }
         return (<div>{lines}</div>);
     }
+    processReplies(replies){
+        let newreplies = [{}];
+        replies.forEach(rep => {
+            rep.myMarkup = this.markup(rep.body_text, rep.reply_number, replies)
+            newreplies.push(rep);
+        })
+        newreplies.shift(); // remove empty elem at start
+        this.setState({
+            replies: newreplies
+        });
+    }
+
 
     focusOnReply(repNum){
         let focussed = this.state.replies.find(rep => repNum === rep.reply_number)
@@ -180,8 +194,6 @@ export default class ViewThread extends Component{
     }
 
     clickedReplyNumber(reply){
-        console.log('clicked:')
-        console.log(reply)
         this.setState({
             postReplyText: reply.reply_number
         });
@@ -195,7 +207,7 @@ export default class ViewThread extends Component{
                     <div>
                         {   this.state.error_message && // If display error message
                             <div className="container c-border">
-                                <div>Failed to Load Thread: {this.state.thread_head._id}</div>
+                                <div>Failed to Load Thread: {this.state.thread_head._id}<br/>Extra info: {this.state.error_message_info}</div>
                                 <img src={noimage} alt="None"/>
                                 <Link to="/">Return to Catalog</Link>
                             </div>
@@ -206,14 +218,16 @@ export default class ViewThread extends Component{
                                 className="c-border c-hoverable" style={{padding:"2vw"}}
                                 id={"rep_"+this.state.thread_id}
                                 >
-                                    <Draggable handle="strong">
+                                    <div handle="strong">
                                         <div style={{display:"inline-block"}}> 
-                                            <strong className="cursor" style={{cursor:"move", backgroundColor:"white", width:"4vw"}}>
-                                                ■
-                                            </strong>
-                                            <img src={"http://localhost:5000/thread/"+this.state.thread_head._id+"/image"} alt="Thread" className="c-border c-drop-shadow" style={{maxWidth:"100%"}}/>
+                                            {/* <strong className="cursor" style={{cursor:"move", backgroundColor:"inherit", width:"4vw"}}>
+                                                ■ //this was previously the Draggable component (;__;),b
+                                            </strong> */}
+                                            { this.state.thread_head._id && // if defined
+                                                <img src={"http://localhost:5000/thread/"+this.state.thread_head._id+"/image"} alt="Thread" className="c-border c-drop-shadow" style={{maxWidth:"100%"}}/>
+                                            }
                                         </div>
-                                    </Draggable>
+                                    </div>
                                     <div className="c-border-sides c-hoverable2">
                                         <h1 className="c-hoverable3 width container" style={{marginTop:"1vh"}}> {this.state.thread_head.thread_title}</h1>
                                         <p className="c-hoverable3 width container c-subtitle">
@@ -229,7 +243,7 @@ export default class ViewThread extends Component{
                                 {
                                         this.state.replies.map((reply, index) => 
                                             <li 
-                                            key={reply._id}
+                                            key={reply.id}
                                             id={"rep_"+reply.reply_number}
                                             className={"c-border c-hoverable container "+(reply.isFocus && "c-focus c-drop-shadow")}
                                             style={{marginBottom:"1vh"}}
@@ -260,6 +274,7 @@ export default class ViewThread extends Component{
                                                             (
                                                                 reply.repliesToMe.map(rep => (
                                                                     <HashLink
+                                                                    key={rep.id}
                                                                     scroll={(el) => el.scrollIntoView({ behavior: 'smooth', block: 'center' })}
                                                                     smooth
                                                                     to={"#rep_"+rep}
@@ -274,14 +289,17 @@ export default class ViewThread extends Component{
                                                         }
                                                     </div>
                                                     <div style={{borderLeft: "1px solid black", marginTop:"1vh", paddingLeft:"1vw"}} className="c-hoverable3">
-                                                        {this.markup(reply.body_text, reply.reply_number)}
+                                                        {reply.myMarkup}
                                                     </div>
                                                 </div>
                                             </li>
                                         )
                                     }
                                 </ul>
-                                <PostReply parentId={this.state.thread_id} suppliedText={this.state.postReplyText}/>
+                                <PostReply 
+                                parentId={this.state.thread_id} 
+                                suppliedText={this.state.postReplyText} 
+                                refreshParent={this.refreshPage}/>
                                 {this.state.showPeekedReply && 
                                     <div className="c-bg c-border c-subtitle" style={{position:'fixed', left:this.state.mouseX-window.screenX, top:this.state.mouseY-window.screenY, maxWidth:'30vw', padding:'4px'}}>
                                         <div className="d-flex flex-column">
@@ -298,7 +316,7 @@ export default class ViewThread extends Component{
                                                 </div>
                                             </div>
                                             <div>
-                                                {this.markup(this.state.hoveredReply.body_text, this.state.hoveredReply.reply_number)}
+                                                {this.state.hoveredReply.myMarkup}
                                             </div>
                                         </div>
                                     </div>
