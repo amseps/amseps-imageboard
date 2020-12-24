@@ -1,19 +1,22 @@
 import React, {Component} from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 
+import noimage from './../common_images/noimage_t.png';
+
 export default class Catalog extends Component{
     constructor(props){
         super(props);
 
-        this.state = {
-            is_thumb: true,
-            thumb_loaded: false,
-            full_loaded: false
-        };
-
         this.toggleThumb = this.toggleThumb.bind(this);
         this.thumbLoaded = this.thumbLoaded.bind(this);
         this.fullLoaded = this.fullLoaded.bind(this);
+
+        
+        this.state = {
+            is_thumb: true,
+            thumb_loaded: false,
+            full_loaded: false,
+        };
     }
 
     componentDidMount(){
@@ -54,7 +57,11 @@ export default class Catalog extends Component{
                         }
                         <LazyLoadImage 
                         src={this.props.thumbimg} 
-                        alt={<div className="spinner-border" role="status" />}
+                        // onError={this.imageError()} as it stands now, bc this isn't an img tag
+                        //I can't use onError, 
+                        // so the circles must spin forever (;__;),b
+                        // to write this back in, add state over what the image should be, and an 'errored' flag
+                        alt={""}
                         style={{maxWidth:"100%"}}
                         onLoad={this.thumbLoaded}
                         />
@@ -64,7 +71,7 @@ export default class Catalog extends Component{
                 (//if using full image
                     <div>
                         {!this.state.full_loaded && // if loading thumb
-                            <div className="spinner-border" role="status"><span className="sr-only">Loading...</span></div>
+                            <div className="spinner-border" role="status"></div>
                         }
                         <LazyLoadImage 
                         src={this.props.fullimg}

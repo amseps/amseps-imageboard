@@ -51,7 +51,8 @@ export default class PostReply extends Component{
             let newtex = this.state.body_text + ">>" + this.props.suppliedText.toString() + '\n'; // .. you can't mutate strings specifically for textarea? that's surreal
             this.setState({
                 prevSuppliedText: this.props.suppliedText,
-                body_text: newtex
+                body_text: newtex,
+                showReplyWidget: true,
             });
 
         }
@@ -120,7 +121,7 @@ export default class PostReply extends Component{
                 })
                 .catch(e => {
                     console.log("111 Post Reply Error: " + e);
-                    this.newToast("Reply Fail", "Could not post your reply because: " + e.response.data.info);
+                    this.newToast("Reply Fail", "Could not post your reply because your image couldn't upload. Images must be jpg, jpeg, png, or gif, with a 2mb filesize limit");
                 })
             })
         }else{ // if no image
@@ -209,7 +210,7 @@ export default class PostReply extends Component{
                                 onChange={this.changeImage}
                                 style={{marginTop:'1%'}}
                                 />
-                                <img style={{maxHeight:'30vh', maxWidth:'100%', marginTop:'3%', marginBottom:'3%'}} src={this.state.reply_image_preview} alt={"What to post"}/>
+                                <img style={{maxHeight:'30vh', maxWidth:'100%', marginTop:'3%', marginBottom:'3%'}} src={this.state.reply_image_preview} alt={""}/>
                             </div>
                             <div className="form-group c-no-vert-margins d-flex row">
                                 <input type="submit" value="Post Reply" className="btn btn-primary" />

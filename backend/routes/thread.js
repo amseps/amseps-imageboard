@@ -68,14 +68,16 @@ router.get("/:id/image/thumb", (req, res) => {
             res.set("Content-Type", thread.thread_image_type);
             res.send(fs.readFileSync("./images/thumb/" + thread.thread_thumb_filename));
         }else{
-            console.log("Couldn't find the image err: " + err);
-            res.set("Content-Type", "image/png");
-            res.send(fs.readFileSync("./images/common_images/noimage.png"));
+            res.status(204);
+            // console.log("Couldn't find the image err: " + err);
+            // res.set("Content-Type", "image/png");
+            // res.send(fs.readFileSync("./images/common_images/noimage.png"));
         }
     }).catch(err =>{
-        console.log("Couldn't find the image err: " + err);
-        res.set("Content-Type", "image/png");
-        res.send(fs.readFileSync("./images/common_images/noimage.png"));
+        res.status(204);
+        // console.log("Couldn't find the image err: " + err);
+        // res.set("Content-Type", "image/png");
+        // res.send(fs.readFileSync("./images/common_images/noimage.png"));
     })
 });
 router.get("/:id/image", (req, res) => {

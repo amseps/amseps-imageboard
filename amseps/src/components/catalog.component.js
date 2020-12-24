@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import PostThread from './post_thread.component';
 import axios from 'axios';
 import Util from './../utility';
-import { LazyLoadImage } from 'react-lazy-load-image-component';
+// import { LazyLoadImage } from 'react-lazy-load-image-component';
+import LazyImage from './lazyimage.component';
 import {Link} from 'react-router-dom';
 
 
@@ -78,8 +79,13 @@ export default class Catalog extends Component{
                                                     </div>
                                                 </div>
                                                 <br/>
-                                                <div className="d-flex justify-content-between">
-                                                    <LazyLoadImage src={"http://localhost:5000/thread/"+thread._id+"/image/thumb"} alt="Thread" style={{height:100}} className="c-border c-drop-shadow-sm"/>
+                                                <div className="d-flex justify-content-between"> 
+                                                    <LazyImage 
+                                                    thumbimg={"http://localhost:5000/thread/"+thread._id+"/image/thumb"} 
+                                                    fullimg={""}
+                                                    alt="Thread" 
+                                                    style={{height:100}} 
+                                                    className="c-border c-drop-shadow-sm"/>
                                                     <p className="container">{thread.body_text}</p>
                                                 </div>
                                             </Link>

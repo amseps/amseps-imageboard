@@ -62,17 +62,17 @@ The website will then open in your browser and you are free to make changes :) M
     ↑ Second floating reply box
         Implement Reply Peek 
       And markdown styling of replies and posts!
+    ↑ clicking replynum opens replywidget
+    ↑ Reload page on upload HAS TO REACT TO RESPONSE FROM SERVER
+      or just add new reply to the state)
+      Also reload on reply
+      Add a better 'refresh' button than just refreshing page
       
 
   	#TODO:
 
     Actionable: //////////////////////////////////////////////////////////////////////////////////
     ↑ Add an icon!
-    ↑ clicking replynum opens replywidget
-    ↑ Reload page on upload HAS TO REACT TO RESPONSE FROM SERVER
-      or just add new reply to the state)
-      Also reload on reply
-      Add a better 'refresh' button than just refreshing page
     ↑ Make noimage local instead of sending an image get request
 
     Minimum Viable Product: ////////////////////////////////////////////////////////////////////
@@ -106,6 +106,8 @@ The website will then open in your browser and you are free to make changes :) M
       ↑ catch when file isn't an image ?
 
     Instantly after MVP:
+      ↑ Tickable slow refresh
+      ↑ Count new items in tab 
       ↑ Mini-votes:
         gold -> gold/brown, sparkle -> white/purple, clover -> green/black, fire -> red/orange, melon ->pink/green
           Threads and replies are able to be voted on.

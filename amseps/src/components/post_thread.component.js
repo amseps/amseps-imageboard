@@ -152,7 +152,7 @@ export default class PostThread extends Component{
                         onChange={this.changeImage}
                         style={{marginTop:'1%'}}
                         />
-                        <img style={{maxHeight:'30vh', maxWidth:'100%', marginTop:'3%', marginBottom:'3%'}} src={this.state.thread_image_preview} alt={"Preview of what to post"}/>
+                        <img style={{maxHeight:'30vh', maxWidth:'100%', marginTop:'3%', marginBottom:'3%'}} src={this.state.thread_image_preview} alt={""}/>
                     </div>
                     <div className="form-group">
                         <input type="submit" value="Post Thread" className="btn btn-primary" />

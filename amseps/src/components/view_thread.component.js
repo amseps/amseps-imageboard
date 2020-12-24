@@ -73,7 +73,7 @@ export default class ViewThread extends Component{
                 })
                 this.processReplies(replies.data);
             }).catch(err => {
-                if(err.response.status === 204){
+                if(err.response && err.response.status === 204){
                     console.log("204, No replies to show")
                 }else{ // 400 ...
                     this.setState({

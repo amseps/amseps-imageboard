@@ -181,4 +181,7 @@
     position: fixed;
     right: 4px;
     top: 4px;
+    background-color: white;
+    max-width: 20vw;
+    z-index: 2;
 }
