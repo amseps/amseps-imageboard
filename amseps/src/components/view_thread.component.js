@@ -26,6 +26,8 @@ export default class ViewThread extends Component{
 
         this.state = {
             thread_head: {},
+            // please use this.props.match.params.id
+            // instead of this.state.thread_head._id
             replies: [{_id:""}],
             error_message: false,
             error_message_info: "",
@@ -205,9 +207,9 @@ export default class ViewThread extends Component{
                 { (!this.state.isloading)?
                 (
                     <div>
-                        {   this.state.error_message && // If display error message
+                        {   this.state.error_message && // If display error message  
                             <div className="container c-border">
-                                <div>Failed to Load Thread: {this.state.thread_head._id}<br/>Extra info: {this.state.error_message_info}</div>
+                                <div>Failed to Load Thread: {this.props.match.params.id}<br/>Extra info: {this.state.error_message_info}</div>
                                 <img src={noimage} alt="None"/>
                                 <Link to="/">Return to Catalog</Link>
                             </div>
@@ -223,8 +225,8 @@ export default class ViewThread extends Component{
                                             {/* <strong className="cursor" style={{cursor:"move", backgroundColor:"inherit", width:"4vw"}}>
                                                 ■ //this was previously the Draggable component (;__;),b
                                             </strong> */}
-                                            { this.state.thread_head._id && // if defined
-                                                <img src={"http://localhost:5000/thread/"+this.state.thread_head._id+"/image"} alt="Thread" className="c-border c-drop-shadow" style={{maxWidth:"100%"}}/>
+                                            { this.props.match.params.id && // if defined
+                                                <img src={"http://localhost:5000/thread/"+this.props.match.params.id+"/image"} alt="Thread" className="c-border c-drop-shadow" style={{maxWidth:"100%"}}/>
                                             }
                                         </div>
                                     </div>
@@ -252,8 +254,8 @@ export default class ViewThread extends Component{
                                                     { reply.has_image && (
                                                         <div>
                                                             <LazyImage 
-                                                            fullimg={"http://localhost:5000/thread/"+this.state.thread_head._id+"/image/"+reply._id} 
-                                                            thumbimg={"http://localhost:5000/thread/"+this.state.thread_head._id+"/image/"+reply._id+"/thumb"}
+                                                            fullimg={"http://localhost:5000/thread/"+this.props.match.params.id+"/image/"+reply._id} 
+                                                            thumbimg={"http://localhost:5000/thread/"+this.props.match.params.id+"/image/"+reply._id+"/thumb"}
                                                             alt="Thread" className="c-border c-drop-shadow" 
                                                             style={{maxWidth:"100%", marginTop:"1vh", marginBottom:"2vh"}}/>
                                                         </div>

@@ -181,8 +181,9 @@ upload.fields(
                 const newThread = Thread(ThreadData);
                 console.log(newThread);
                 newThread.save()
-                .then(() => {
-                    console.log("New Thread Added: " + ThreadData.thread_number + " @ " +ThreadData.id)
+                .then((thisthread) => {
+                    console.log("New Thread Added: " + thisthread.thread_number + " @ " +thisthread._id)
+                    res.status(200).json({id:thisthread._id})
                 }).catch(err => {
                     res.status(400).json({info:"bad"})
                 })

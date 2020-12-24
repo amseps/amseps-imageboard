@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
+import {Link} from 'react-router-dom';
 
 import imageCompression from 'browser-image-compression';
 
@@ -25,6 +26,8 @@ export default class PostThread extends Component{
             thread_image: "",
             thread_image_preview: "",
             counter_classname: "c-border-light",
+            link_to_new_thread: "",
+            thread_posted_success: false,
         };
     }
 
@@ -96,6 +99,10 @@ export default class PostThread extends Component{
             .then(res =>{
                 console.log("Thread posted succesfully: ");
                 console.log(res.data);
+                this.setState({
+                    link_to_new_thread: ("/thread/"+res.data.id),
+                    thread_posted_success: true
+                })
             })
             .catch(e => {
                 console.log("Post Thread Error: " + e);
@@ -157,6 +164,12 @@ export default class PostThread extends Component{
                     <div className="form-group">
                         <input type="submit" value="Post Thread" className="btn btn-primary" />
                     </div>
+                    {   this.state.thread_posted_success && 
+                    <div className="form-group c-border">
+                        Posted thread success! <br/>
+                        New Thread: <Link to={this.state.link_to_new_thread}>{this.state.link_to_new_thread}</Link>
+                    </div>
+                    }
                 </form>
             </div>
         );
