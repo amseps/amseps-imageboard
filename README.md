@@ -67,22 +67,24 @@ The website will then open in your browser and you are free to make changes :) M
       or just add new reply to the state)
       Also reload on reply
       Add a better 'refresh' button than just refreshing page
+    ↑ Make noimage local instead of sending an image get request
+    ↑ Make static pages
+      Home
       
 
   	#TODO:
 
     Actionable: //////////////////////////////////////////////////////////////////////////////////
     ↑ Add an icon!
-    ↑ Make noimage local instead of sending an image get request
+    
 
     Minimum Viable Product: ////////////////////////////////////////////////////////////////////
       ↑ Make static pages
+        FAQ
         Rules page
         Meme pages :)
       
-      ↑ Add styling to headerbar
-        Like on hover AMSEPS change color
-        Come up with a better name?
+
      ↑ Style 404
         Other error messages ?
       ↑ Admin controls
@@ -98,6 +100,7 @@ The website will then open in your browser and you are free to make changes :) M
           https://www.npmjs.com/package/react-google-recaptcha-v3 
       ↑ Better clientside controls to help the user post the correct things
         IE: (sorry! you can only posts gifs! or something like that)
+        includes when too much is typed for name, etc
       ↑ Rewrite Error log for backend, (and frontend :))
       ↑ Archiving old threads? How will it work
         Just have a field like archived: true
@@ -106,6 +109,9 @@ The website will then open in your browser and you are free to make changes :) M
       ↑ catch when file isn't an image ?
 
     Instantly after MVP:
+      ↑ Add styling to headerbar
+        Like on hover AMSEPS change color
+        Come up with a better name?
       ↑ Tickable slow refresh
       ↑ Count new items in tab 
       ↑ Mini-votes:
