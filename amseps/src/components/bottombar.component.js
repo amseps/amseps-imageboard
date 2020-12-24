@@ -4,7 +4,7 @@ import {Navbar, Nav} from 'react-bootstrap'
 export default class Bottombar extends Component{
     render(){
         return(
-            <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+            <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" style={{marginTop:"3vh"}}>
             <Navbar.Brand href="/">AMSEPS</Navbar.Brand>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
